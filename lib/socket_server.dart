@@ -1,10 +1,14 @@
+import 'package:idlebattle_server/engine.dart';
+import 'package:idlebattle_server/socket_message.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class SocketServer {
-  const SocketServer();
+  final Engine _engine;
+
+  const SocketServer(this._engine);
 
   void handler(WebSocketChannel webSocket) {
-    print('Connection opened: ${webSocket.hashCode}');
+    print('OPENED   [${webSocket.hashCode}]');
 
     webSocket.stream.listen(
       (message) => handleMessage(webSocket, message),
@@ -14,9 +18,9 @@ class SocketServer {
   }
 
   void handleMessage(WebSocketChannel webSocket, dynamic message) {
-    print('<<<[${webSocket.hashCode}] $message');
-    webSocket.sink.add('echo ${message.toString().length}');
-    print('>>>[${webSocket.hashCode}] ${message.toString().length}');
+    final SocketMessage socketMessage =
+        SocketMessage(webSocket, message.toString());
+    _engine.handle(socketMessage);
   }
 
   void handleError(Object error) {
@@ -24,6 +28,6 @@ class SocketServer {
   }
 
   void handleDone(WebSocketChannel webSocket) {
-    print('DONE');
+    print('DONE     [${webSocket.hashCode}]');
   }
 }

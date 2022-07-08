@@ -1,13 +1,9 @@
-import 'package:shelf/shelf.dart';
-import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class SocketHandler {
-  late final WebSocketChannel webSocket;
+  const SocketHandler();
 
-  void handler(WebSocketChannel newWebSocket) {
-    webSocket = newWebSocket;
-
+  void handler(WebSocketChannel webSocket) {
     print('Connection opened: ${webSocket.hashCode}');
 
     webSocket.stream.listen(
@@ -29,11 +25,5 @@ class SocketHandler {
 
   void handleDone(WebSocketChannel webSocket) {
     print('DONE');
-  }
-
-  static Handler create() {
-    final SocketHandler socketHandler = SocketHandler();
-
-    return webSocketHandler(socketHandler.handler);
   }
 }

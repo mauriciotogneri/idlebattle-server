@@ -11,7 +11,5 @@ class SocketMessage {
 
   Event get event => Event.fromString(_message);
 
-  void reply(Object object) {
-    _webSocket.sink.add('echo ${object.toString().length}');
-  }
+  void reply(Object object) => _webSocket.sink.add(object.toString());
 }

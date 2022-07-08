@@ -1,7 +1,7 @@
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-class SocketHandler {
-  const SocketHandler();
+class SocketServer {
+  const SocketServer();
 
   void handler(WebSocketChannel webSocket) {
     print('Connection opened: ${webSocket.hashCode}');

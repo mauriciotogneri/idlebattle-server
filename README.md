@@ -1,2 +1,1 @@
-# idlebattle-server
-Idle Battle Server
+# Idle Battle Server

@@ -1,0 +1,10 @@
+name: idlebattle_server
+description: Server for Idle Battle
+version: 0.0.1
+homepage: https://github.com/mauriciotogneri/idlebattle-server
+
+environment:
+  sdk: '>=2.17.5 <3.0.0'
+
+dev_dependencies:
+  build_runner: ^2.1.11

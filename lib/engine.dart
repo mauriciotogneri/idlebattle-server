@@ -1,9 +1,9 @@
-import 'package:idlebattle_server/event.dart';
+import 'package:idlebattle_server/message.dart';
 
 class Engine {
   const Engine();
 
-  String? handle(Event event) {
-    return '{}';
+  Message? handle(Message message) {
+    return const Message(event: 'YES!');
   }
 }

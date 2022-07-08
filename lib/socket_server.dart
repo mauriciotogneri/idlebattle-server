@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'package:idlebattle_server/engine.dart';
-import 'package:idlebattle_server/event.dart';
+import 'package:idlebattle_server/message.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class SocketServer {
@@ -17,16 +18,17 @@ class SocketServer {
     );
   }
 
-  void handleMessage(WebSocketChannel webSocket, String message) {
-    final Event event = Event.fromString(message.toString());
+  void handleMessage(WebSocketChannel webSocket, String input) {
+    final Message message = Message.fromJson(jsonDecode(input.toString()));
 
-    print('RECEIVED [${webSocket.hashCode}] $message');
+    print('RECEIVED [${webSocket.hashCode}] $input');
 
-    final String? response = _engine.handle(event);
+    final Message? response = _engine.handle(message);
 
     if (response != null) {
-      webSocket.sink.add(response);
-      print('SENT     [${webSocket.hashCode}] $response');
+      final String output = jsonEncode(response.toJson());
+      webSocket.sink.add(output);
+      print('SENT     [${webSocket.hashCode}] $output');
     }
   }
 

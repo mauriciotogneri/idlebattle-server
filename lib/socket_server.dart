@@ -1,5 +1,5 @@
 import 'package:idlebattle_server/engine.dart';
-import 'package:idlebattle_server/socket_message.dart';
+import 'package:idlebattle_server/event.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class SocketServer {
@@ -11,16 +11,23 @@ class SocketServer {
     print('OPENED   [${webSocket.hashCode}]');
 
     webSocket.stream.listen(
-      (message) => handleMessage(webSocket, message),
+      (message) => handleMessage(webSocket, message.toString()),
       onError: handleError,
       onDone: () => handleDone(webSocket),
     );
   }
 
-  void handleMessage(WebSocketChannel webSocket, dynamic message) {
-    final SocketMessage socketMessage =
-        SocketMessage(webSocket, message.toString());
-    _engine.handle(socketMessage);
+  void handleMessage(WebSocketChannel webSocket, String message) {
+    final Event event = Event.fromString(message.toString());
+
+    print('RECEIVED [${webSocket.hashCode}] $message');
+
+    final String? response = _engine.handle(event);
+
+    if (response != null) {
+      webSocket.sink.add(response);
+      print('SENT     [${webSocket.hashCode}] $response');
+    }
   }
 
   void handleError(Object error) {

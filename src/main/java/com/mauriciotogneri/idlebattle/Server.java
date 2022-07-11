@@ -59,4 +59,11 @@ public class Server extends WebSocketServer
         setConnectionLostTimeout(0);
         setConnectionLostTimeout(100);
     }
+
+    public static void send(@NotNull WebSocket webSocket, Message message)
+    {
+        String text = Json.string(message);
+        webSocket.send(text);
+        System.out.println(webSocket.hashCode() + " [SENT]     " + text);
+    }
 }

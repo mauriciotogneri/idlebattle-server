@@ -1,5 +1,7 @@
 package com.mauriciotogneri.idlebattle.game;
 
+import com.mauriciotogneri.idlebattle.messages.OutputMessage;
+import com.mauriciotogneri.idlebattle.messages.PlayerStatus;
 import com.mauriciotogneri.idlebattle.server.Server;
 
 import org.java_websocket.WebSocket;
@@ -10,6 +12,8 @@ public class Player
     private final int index;
     private final String name;
     private double money = 0;
+    private int mineLevel = 0;
+    private int attackLevel = 0;
 
     public Player(WebSocket webSocket, int index, String name)
     {
@@ -33,13 +37,53 @@ public class Player
         return (this.webSocket == webSocket);
     }
 
-    public void send(Message message)
+    public boolean increaseMine()
+    {
+        int cost = mineLevel * 100;
+
+        if (money >= cost)
+        {
+            mineLevel++;
+            money -= cost;
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public boolean increaseAttack()
+    {
+        int cost = attackLevel * 100;
+
+        if (money >= cost)
+        {
+            attackLevel++;
+            money -= cost;
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void send(OutputMessage message)
     {
         Server.send(webSocket, message);
     }
 
-    public Player player(int index)
+    public PlayerStatus status()
     {
-        return new Player(webSocket, index, name);
+        return new PlayerStatus(
+                index,
+                name,
+                (int) money,
+                mineLevel,
+                attackLevel
+        );
     }
 }

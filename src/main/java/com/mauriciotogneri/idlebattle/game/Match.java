@@ -1,5 +1,7 @@
 package com.mauriciotogneri.idlebattle.game;
 
+import com.mauriciotogneri.idlebattle.messages.OutputMessage;
+import com.mauriciotogneri.idlebattle.server.Server;
 import com.mauriciotogneri.idlebattle.types.MatchState;
 
 import org.java_websocket.WebSocket;
@@ -36,7 +38,7 @@ public class Match implements Runnable
     {
         for (Player player : players)
         {
-            player.send(Message.matchStarted(id));
+            player.send(OutputMessage.matchStarted(id));
         }
 
         state = MatchState.RUNNING;
@@ -62,7 +64,7 @@ public class Match implements Runnable
 
             for (Player player : players)
             {
-                player.send(Message.playerDisconnected(disconnectedPlayer.name(), id));
+                player.send(OutputMessage.playerDisconnected(disconnectedPlayer.name(), id));
             }
 
             if (!hasPlayers())
@@ -80,6 +82,14 @@ public class Match implements Runnable
 
         if (player != null)
         {
+            if (player.increaseMine())
+            {
+                player.send(OutputMessage.playerUpdate(player.status()));
+            }
+        }
+        else
+        {
+            Server.send(webSocket, OutputMessage.invalidMatchId(id));
         }
     }
 
@@ -89,6 +99,14 @@ public class Match implements Runnable
 
         if (player != null)
         {
+            if (player.increaseAttack())
+            {
+                player.send(OutputMessage.playerUpdate(player.status()));
+            }
+        }
+        else
+        {
+            Server.send(webSocket, OutputMessage.invalidMatchId(id));
         }
     }
 
@@ -98,6 +116,11 @@ public class Match implements Runnable
 
         if (player != null)
         {
+            // TODO
+        }
+        else
+        {
+            Server.send(webSocket, OutputMessage.invalidMatchId(id));
         }
     }
 
@@ -115,7 +138,7 @@ public class Match implements Runnable
         return null;
     }
 
-    private void broadcast(Message message)
+    private void broadcast(OutputMessage message)
     {
         for (Player player : players)
         {
@@ -135,7 +158,7 @@ public class Match implements Runnable
         {
             // TODO: run game logic
 
-            broadcast(Message.matchUpdate(id));
+            broadcast(OutputMessage.matchUpdate(id));
 
             try
             {

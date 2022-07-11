@@ -1,7 +1,6 @@
 package com.mauriciotogneri.idlebattle.server;
 
-import com.mauriciotogneri.idlebattle.game.Message;
-import com.mauriciotogneri.idlebattle.game.MessageHandler;
+import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -63,7 +62,7 @@ public class Server extends WebSocketServer
         setConnectionLostTimeout(100);
     }
 
-    public static void send(@NotNull WebSocket webSocket, Message message)
+    public static void send(@NotNull WebSocket webSocket, OutputMessage message)
     {
         String text = Json.string(message);
         webSocket.send(text);

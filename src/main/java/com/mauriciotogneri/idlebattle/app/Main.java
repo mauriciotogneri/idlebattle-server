@@ -1,7 +1,7 @@
 package com.mauriciotogneri.idlebattle.app;
 
 import com.mauriciotogneri.idlebattle.game.Engine;
-import com.mauriciotogneri.idlebattle.game.MessageHandler;
+import com.mauriciotogneri.idlebattle.server.MessageHandler;
 import com.mauriciotogneri.idlebattle.server.Server;
 
 import org.jetbrains.annotations.NotNull;

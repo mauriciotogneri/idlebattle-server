@@ -1,5 +1,6 @@
 package com.mauriciotogneri.idlebattle.game;
 
+import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.server.Logger;
 import com.mauriciotogneri.idlebattle.server.Server;
 
@@ -23,7 +24,7 @@ public class Engine
         if (waitingPublic.isEmpty())
         {
             waitingPublic.add(new WaitingPublicPlayer(webSocket, playerName));
-            Server.send(webSocket, Message.waitingPublic());
+            Server.send(webSocket, OutputMessage.waitingPublic());
         }
         else
         {
@@ -47,7 +48,7 @@ public class Engine
                 matchId
         ));
 
-        Server.send(webSocket, Message.waitingPrivate(matchId));
+        Server.send(webSocket, OutputMessage.waitingPrivate(matchId));
     }
 
     public void joinPrivate(WebSocket webSocket, String matchId, String playerName)
@@ -65,7 +66,7 @@ public class Engine
         }
         else
         {
-            Server.send(webSocket, Message.invalidMatchId(matchId));
+            Server.send(webSocket, OutputMessage.invalidMatchId(matchId));
         }
     }
 
@@ -79,7 +80,7 @@ public class Engine
         }
         else
         {
-            Server.send(webSocket, Message.invalidMatchId(matchId));
+            Server.send(webSocket, OutputMessage.invalidMatchId(matchId));
         }
     }
 
@@ -93,7 +94,7 @@ public class Engine
         }
         else
         {
-            Server.send(webSocket, Message.invalidMatchId(matchId));
+            Server.send(webSocket, OutputMessage.invalidMatchId(matchId));
         }
     }
 
@@ -107,7 +108,7 @@ public class Engine
         }
         else
         {
-            Server.send(webSocket, Message.invalidMatchId(matchId));
+            Server.send(webSocket, OutputMessage.invalidMatchId(matchId));
         }
     }
 
@@ -191,17 +192,17 @@ public class Engine
         {
             Player player = match.onPlayerDisconnected(webSocket);
 
-            if (player != null)
-            {
-                Logger.onDisconnected(webSocket, String.format("From match: (%s, %s, %s)", match.id(), player.name(), player.index()));
-            }
-
             if (!match.hasPlayers())
             {
                 matches.remove(match.id());
             }
 
-            return;
+            if (player != null)
+            {
+                Logger.onDisconnected(webSocket, String.format("From match: (%s, %s, %s)", match.id(), player.name(), player.index()));
+
+                return;
+            }
         }
 
         Logger.log(webSocket, "Connection not found in any entity");

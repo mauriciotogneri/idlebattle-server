@@ -18,114 +18,60 @@ public class Engine
     private final List<WaitingPrivatePlayer> waitingPrivate = new ArrayList<>();
     private final Map<String, Match> matches = new HashMap<>();
 
-    public synchronized void onMessage(@NotNull WebSocket webSocket, @NotNull Message message)
+    public void joinPublic(WebSocket webSocket, String playerName)
     {
-        switch (message.event)
+        if (waitingPublic.isEmpty())
         {
-            case JOIN_PUBLIC:
-                joinPublic(webSocket, message);
-                break;
-
-            case CREATE_PRIVATE:
-                createPrivate(webSocket, message);
-                break;
-
-            case JOIN_PRIVATE:
-                joinPrivate(webSocket, message);
-                break;
-
-            case INCREASE_MINE:
-                increaseMine(webSocket, message);
-                break;
-
-            case INCREASE_ATTACK:
-                increaseAttack(webSocket, message);
-                break;
-
-            case LAUNCH_UNITS:
-                launchUnits(webSocket, message);
-                break;
-        }
-    }
-
-    private void joinPublic(WebSocket webSocket, @NotNull Message message)
-    {
-        String playerName = message.playerName;
-
-        if (valueNotEmpty(playerName))
-        {
-            if (waitingPublic.isEmpty())
-            {
-                waitingPublic.add(new WaitingPublicPlayer(webSocket, playerName));
-                Server.send(webSocket, Message.waitingPublic());
-            }
-            else
-            {
-                WaitingPublicPlayer waitingPlayer = waitingPublic.remove(0);
-
-                String matchId = Match.newId();
-                Player player1 = new Player(waitingPlayer.webSocket, 0, waitingPlayer.name);
-                Player player2 = new Player(webSocket, 1, playerName);
-
-                startMatch(matchId, player1, player2);
-            }
+            waitingPublic.add(new WaitingPublicPlayer(webSocket, playerName));
+            Server.send(webSocket, Message.waitingPublic());
         }
         else
         {
-            Server.send(webSocket, Message.invalidPlayerName(playerName));
-        }
-    }
+            WaitingPublicPlayer waitingPlayer = waitingPublic.remove(0);
 
-    private void createPrivate(WebSocket webSocket, @NotNull Message message)
-    {
-        String playerName = message.playerName;
-
-        if (valueNotEmpty(playerName))
-        {
             String matchId = Match.newId();
+            Player player1 = new Player(waitingPlayer.webSocket, 0, waitingPlayer.name);
+            Player player2 = new Player(webSocket, 1, playerName);
 
-            waitingPrivate.add(new WaitingPrivatePlayer(
-                    webSocket,
-                    playerName,
-                    matchId
-            ));
+            startMatch(matchId, player1, player2);
+        }
+    }
 
-            Server.send(webSocket, Message.waitingPrivate(matchId));
+    public void createPrivate(WebSocket webSocket, String playerName)
+    {
+        String matchId = Match.newId();
+
+        waitingPrivate.add(new WaitingPrivatePlayer(
+                webSocket,
+                playerName,
+                matchId
+        ));
+
+        Server.send(webSocket, Message.waitingPrivate(matchId));
+    }
+
+    public void joinPrivate(WebSocket webSocket, String matchId, String playerName)
+    {
+        WaitingPrivatePlayer waitingPlayer = getWaitingPrivate(matchId);
+
+        if (waitingPlayer != null)
+        {
+            waitingPrivate.remove(waitingPlayer);
+
+            Player player1 = new Player(waitingPlayer.webSocket, 0, waitingPlayer.name);
+            Player player2 = new Player(webSocket, 1, playerName);
+
+            startMatch(matchId, player1, player2);
         }
         else
         {
-            Server.send(webSocket, Message.invalidPlayerName(playerName));
+            Server.send(webSocket, Message.invalidMatchId(matchId));
         }
     }
 
-    private void joinPrivate(WebSocket webSocket, @NotNull Message message)
+    public void increaseMine(WebSocket webSocket, String matchId)
     {
-        String matchId = message.matchId;
-        String playerName = message.playerName;
-
-        if (valueNotEmpty(matchId) && valueNotEmpty(playerName))
-        {
-            WaitingPrivatePlayer waitingPlayer = getWaitingPrivate(matchId);
-
-            if (waitingPlayer != null)
-            {
-                waitingPrivate.remove(waitingPlayer);
-
-                Player player1 = new Player(waitingPlayer.webSocket, 0, waitingPlayer.name);
-                Player player2 = new Player(webSocket, 1, playerName);
-
-                startMatch(matchId, player1, player2);
-            }
-            else
-            {
-                Server.send(webSocket, Message.invalidMatchId(matchId));
-            }
-        }
-    }
-
-    private void increaseMine(WebSocket webSocket, @NotNull Message message)
-    {
-        Match match = matches.get(message.matchId);
+        Match match = matches.get(matchId);
 
         if (match != null)
         {
@@ -133,13 +79,13 @@ public class Engine
         }
         else
         {
-            Server.send(webSocket, Message.invalidMatchId(message.matchId));
+            Server.send(webSocket, Message.invalidMatchId(matchId));
         }
     }
 
-    private void increaseAttack(WebSocket webSocket, @NotNull Message message)
+    public void increaseAttack(WebSocket webSocket, String matchId)
     {
-        Match match = matches.get(message.matchId);
+        Match match = matches.get(matchId);
 
         if (match != null)
         {
@@ -147,21 +93,21 @@ public class Engine
         }
         else
         {
-            Server.send(webSocket, Message.invalidMatchId(message.matchId));
+            Server.send(webSocket, Message.invalidMatchId(matchId));
         }
     }
 
-    private void launchUnits(WebSocket webSocket, @NotNull Message message)
+    public void launchUnits(WebSocket webSocket, String matchId, int laneId, int amount)
     {
-        Match match = matches.get(message.matchId);
+        Match match = matches.get(matchId);
 
         if (match != null)
         {
-            match.onPlayerLaunchUnits(webSocket, message);
+            match.onPlayerLaunchUnits(webSocket, laneId, amount);
         }
         else
         {
-            Server.send(webSocket, Message.invalidMatchId(message.matchId));
+            Server.send(webSocket, Message.invalidMatchId(matchId));
         }
     }
 
@@ -219,7 +165,7 @@ public class Engine
         matches.put(matchId, match);
     }
 
-    public synchronized void onClose(@NotNull WebSocket webSocket)
+    public void onClose(@NotNull WebSocket webSocket)
     {
         if (!waitingPublic.isEmpty() && waitingPublic.get(0).webSocket == webSocket)
         {
@@ -259,10 +205,5 @@ public class Engine
         }
 
         Logger.log(webSocket, "Connection not found in any entity");
-    }
-
-    private boolean valueNotEmpty(String value)
-    {
-        return (value != null) && !value.trim().isEmpty();
     }
 }

@@ -9,7 +9,7 @@ public class Player
     private final WebSocket webSocket;
     private final int index;
     private final String name;
-    private float money = 0;
+    private double money = 0;
 
     public Player(WebSocket webSocket, int index, String name)
     {

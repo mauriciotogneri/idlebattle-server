@@ -1,7 +1,7 @@
 package com.mauriciotogneri.idlebattle.server;
 
-import com.mauriciotogneri.idlebattle.game.Engine;
 import com.mauriciotogneri.idlebattle.game.Message;
+import com.mauriciotogneri.idlebattle.game.MessageHandler;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -14,13 +14,13 @@ import java.nio.charset.StandardCharsets;
 
 public class Server extends WebSocketServer
 {
-    private final Engine engine;
+    private final MessageHandler handler;
 
-    public Server(int port, Engine engine)
+    public Server(int port, MessageHandler handler)
     {
         super(new InetSocketAddress(port));
 
-        this.engine = engine;
+        this.handler = handler;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class Server extends WebSocketServer
     public void onMessage(@NotNull WebSocket webSocket, String message)
     {
         Logger.onMessageReceived(webSocket, message);
-        engine.onMessage(webSocket, Json.message(message));
+        handler.onMessage(webSocket, Json.message(message));
     }
 
     @Override
@@ -46,7 +46,7 @@ public class Server extends WebSocketServer
     public void onClose(@NotNull WebSocket webSocket, int code, String reason, boolean remote)
     {
         Logger.onClosed(webSocket);
-        engine.onClose(webSocket);
+        handler.onClose(webSocket);
     }
 
     @Override

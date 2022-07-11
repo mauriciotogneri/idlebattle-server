@@ -1,6 +1,5 @@
 package com.mauriciotogneri.idlebattle.game;
 
-import com.mauriciotogneri.idlebattle.server.Server;
 import com.mauriciotogneri.idlebattle.types.MatchState;
 
 import org.java_websocket.WebSocket;
@@ -37,7 +36,7 @@ public class Match implements Runnable
     {
         for (Player player : players)
         {
-            Server.send(player.webSocket, Message.matchStarted(id));
+            player.send(Message.matchStarted(id));
         }
 
         state = MatchState.RUNNING;
@@ -77,7 +76,7 @@ public class Match implements Runnable
     {
         for (Player player : players)
         {
-            if (player.webSocket == webSocket)
+            if (player.has(webSocket))
             {
                 return player;
             }

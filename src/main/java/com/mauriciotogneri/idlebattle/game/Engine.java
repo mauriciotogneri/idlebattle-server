@@ -175,7 +175,7 @@ public class Engine
 
             if (player != null)
             {
-                Logger.onDisconnected(webSocket, String.format("From match: (%s, %s, %s)", match.id(), player.name, player.index));
+                Logger.onDisconnected(webSocket, String.format("From match: (%s, %s, %s)", match.id(), player.name(), player.index()));
             }
         }
     }

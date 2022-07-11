@@ -15,4 +15,7 @@ public class Constants
     public static int UNIT_COST = 100;
     public static double UNIT_SPEED = 0.2;
     public static double UNIT_BASE_DAMAGE = 0.01;
+
+    public static int DIRECTION_UP = 1;
+    public static int DIRECTION_DOWN = -1;
 }

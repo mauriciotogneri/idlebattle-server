@@ -94,9 +94,11 @@ public class OutputMessage
     }
 
     @NotNull
-    public static OutputMessage matchUpdate(MatchStatus matchStatus)
+    public static OutputMessage matchUpdate(MatchStatus matchStatus, PlayerStatus playerStatus)
     {
-        return create(OutputEvent.MATCH_UPDATE).withMatchStatus(matchStatus);
+        return create(OutputEvent.MATCH_UPDATE)
+                .withMatchStatus(matchStatus)
+                .withPlayerStatus(playerStatus);
     }
 
     @NotNull

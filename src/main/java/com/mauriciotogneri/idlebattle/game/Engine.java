@@ -1,5 +1,6 @@
 package com.mauriciotogneri.idlebattle.game;
 
+import com.mauriciotogneri.idlebattle.app.Constants;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.server.Logger;
 import com.mauriciotogneri.idlebattle.server.Server;
@@ -31,8 +32,8 @@ public class Engine
             WaitingPublicPlayer waitingPlayer = waitingPublic.remove(0);
 
             String matchId = Match.newId();
-            Player player1 = new Player(waitingPlayer.webSocket, 0, waitingPlayer.name);
-            Player player2 = new Player(webSocket, 1, playerName);
+            Player player1 = new Player(waitingPlayer.webSocket, Constants.DIRECTION_UP, waitingPlayer.name);
+            Player player2 = new Player(webSocket, Constants.DIRECTION_DOWN, playerName);
 
             startMatch(matchId, player1, player2);
         }
@@ -59,8 +60,8 @@ public class Engine
         {
             waitingPrivate.remove(waitingPlayer);
 
-            Player player1 = new Player(waitingPlayer.webSocket, 0, waitingPlayer.name);
-            Player player2 = new Player(webSocket, 1, playerName);
+            Player player1 = new Player(waitingPlayer.webSocket, Constants.DIRECTION_UP, waitingPlayer.name);
+            Player player2 = new Player(webSocket, Constants.DIRECTION_DOWN, playerName);
 
             startMatch(matchId, player1, player2);
         }
@@ -199,7 +200,7 @@ public class Engine
 
             if (player != null)
             {
-                Logger.onDisconnected(webSocket, String.format("From match: (%s, %s, %s)", match.id(), player.name(), player.index()));
+                Logger.onDisconnected(webSocket, String.format("From match: (%s, %s, %s)", match.id(), player.name(), player.direction()));
 
                 return;
             }

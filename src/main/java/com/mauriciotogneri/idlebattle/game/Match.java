@@ -9,6 +9,7 @@ import org.java_websocket.WebSocket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,12 +17,20 @@ public class Match
 {
     private final String id;
     private final List<Player> players;
+    private final List<Lane> lanes;
     private MatchState state = MatchState.CREATED;
 
     public Match(String id, List<Player> players)
     {
         this.id = id;
         this.players = players;
+
+        this.lanes = new ArrayList<>();
+        this.lanes.add(new Lane(0));
+        this.lanes.add(new Lane(1));
+        this.lanes.add(new Lane(2));
+        this.lanes.add(new Lane(3));
+        this.lanes.add(new Lane(4));
     }
 
     public String id()
@@ -111,7 +120,9 @@ public class Match
         if (player != null)
         {
             // TODO
-            broadcast(OutputMessage.matchUpdate(status()));
+            // check if player can buy units
+            // update lane with new units
+            broadcast(OutputMessage.matchUpdate(status(), player.status()));
         }
         else
         {
@@ -154,6 +165,11 @@ public class Match
             for (Player player : players)
             {
                 player.update(dt);
+            }
+
+            for (Lane lane : lanes)
+            {
+                lane.update(dt);
             }
         }
     }

@@ -10,7 +10,7 @@ import org.java_websocket.WebSocket;
 public class Player
 {
     private final WebSocket webSocket;
-    private final int index;
+    private final int direction;
     private final String name;
 
     private int points = 0;
@@ -18,16 +18,16 @@ public class Player
     private int mineLevel = 0;
     private int attackLevel = 0;
 
-    public Player(WebSocket webSocket, int index, String name)
+    public Player(WebSocket webSocket, int direction, String name)
     {
         this.webSocket = webSocket;
-        this.index = index;
+        this.direction = direction;
         this.name = name;
     }
 
-    public int index()
+    public int direction()
     {
-        return index;
+        return direction;
     }
 
     public String name()

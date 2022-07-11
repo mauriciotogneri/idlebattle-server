@@ -124,14 +124,42 @@ public class Match
 
         if (player != null)
         {
-            // TODO
-            // check if player can buy units
-            // update lane with new units
-            broadcast(OutputMessage.matchUpdate(status(), player.status()));
+            Lane lane = getLane(laneId);
+
+            if ((lane != null) && (lane.isEnabled()))
+            {
+                if (amount > 0)
+                {
+                    Units units = player.buyUnits(amount);
+                    lane.launchUnits(units);
+                    broadcast(OutputMessage.matchUpdate(status(), player.status()));
+                }
+                else
+                {
+                    Server.send(webSocket, OutputMessage.invalidAmount(amount));
+                }
+            }
+            else
+            {
+                Server.send(webSocket, OutputMessage.invalidLaneId(laneId));
+            }
         }
         else
         {
             Server.send(webSocket, OutputMessage.invalidMatchId(id));
+        }
+    }
+
+    @Nullable
+    private Lane getLane(int id)
+    {
+        if ((id >= 0) && (id < lanes.size()))
+        {
+            return lanes.get(id);
+        }
+        else
+        {
+            return null;
         }
     }
 

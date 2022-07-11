@@ -7,11 +7,13 @@ public class Json
 {
     private static final Gson gson = new Gson();
 
-    public static InputMessage message(String input) {
+    public static InputMessage message(String input)
+    {
         return gson.fromJson(input, InputMessage.class);
     }
 
-    public static String string(Object object) {
+    public static String string(Object object)
+    {
         return gson.toJson(object);
     }
 }

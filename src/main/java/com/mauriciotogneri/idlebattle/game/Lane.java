@@ -5,14 +5,25 @@ import java.util.List;
 
 public class Lane
 {
-    private final int index;
+    private final int id;
+    private boolean enabled = true;
     private double wall = 0.5;
     private double inertia = 0;
     private final List<Units> units = new ArrayList<>();
 
-    public Lane(int index)
+    public Lane(int id)
     {
-        this.index = index;
+        this.id = id;
+    }
+
+    public boolean isEnabled()
+    {
+        return enabled;
+    }
+
+    public void launchUnits(Units units)
+    {
+        this.units.add(units);
     }
 
     public void update(double dt)

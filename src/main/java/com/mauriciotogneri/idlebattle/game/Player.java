@@ -7,6 +7,7 @@ import com.mauriciotogneri.idlebattle.messages.PlayerStatus;
 import com.mauriciotogneri.idlebattle.server.Server;
 
 import org.java_websocket.WebSocket;
+import org.jetbrains.annotations.Nullable;
 
 public class Player
 {
@@ -65,6 +66,27 @@ public class Player
         {
             attackLevel++;
             money -= cost;
+        }
+    }
+
+    @Nullable
+    public Units buyUnits(int amount)
+    {
+        final int totalCost = Constants.UNIT_COST * amount;
+
+        if (money >= totalCost)
+        {
+            money -= totalCost;
+
+            return new Units(
+                    direction,
+                    amount,
+                    Constants.UNIT_BASE_DAMAGE * attackLevel
+            );
+        }
+        else
+        {
+            return null;
         }
     }
 

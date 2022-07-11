@@ -74,6 +74,33 @@ public class Match implements Runnable
         return disconnectedPlayer;
     }
 
+    public void onPlayerIncreaseMine(WebSocket webSocket)
+    {
+        Player player = byWebSocket(webSocket);
+
+        if (player != null)
+        {
+        }
+    }
+
+    public void onPlayerIncreaseAttack(WebSocket webSocket)
+    {
+        Player player = byWebSocket(webSocket);
+
+        if (player != null)
+        {
+        }
+    }
+
+    public void onPlayerLaunchUnits(WebSocket webSocket, Message message)
+    {
+        Player player = byWebSocket(webSocket);
+
+        if (player != null)
+        {
+        }
+    }
+
     @Nullable
     private Player byWebSocket(WebSocket webSocket)
     {

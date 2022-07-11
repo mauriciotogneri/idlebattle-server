@@ -44,14 +44,20 @@ public class Message
     }
 
     @NotNull
-    public static Message playerDisconnected(String name, String matchId)
-    {
-        return new Message(Event.PLAYER_DISCONNECTED, name, matchId);
-    }
-
-    @NotNull
     public static Message invalidMatchId(String matchId)
     {
         return new Message(Event.INVALID_MATCH_ID, null, matchId);
+    }
+
+    @NotNull
+    public static Message invalidPlayerName(String playerName)
+    {
+        return new Message(Event.INVALID_PLAYER_NAME, playerName, null);
+    }
+
+    @NotNull
+    public static Message playerDisconnected(String name, String matchId)
+    {
+        return new Message(Event.PLAYER_DISCONNECTED, name, matchId);
     }
 }

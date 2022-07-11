@@ -133,8 +133,8 @@ public class Engine
     private void startMatch(String matchId, @NotNull Player player1, @NotNull Player player2)
     {
         List<Player> players = new ArrayList<>();
-        players.add(new Player(player1.webSocket, 0, player1.name));
-        players.add(new Player(player2.webSocket, 1, player2.name));
+        players.add(player1);
+        players.add(player2);
 
         Match match = new Match(matchId, players);
         match.start();
@@ -167,6 +167,11 @@ public class Engine
         if (match != null)
         {
             Player player = match.onPlayerDisconnected(webSocket);
+
+            if (!match.hasPlayers())
+            {
+                matches.remove(match.id());
+            }
 
             if (player != null)
             {

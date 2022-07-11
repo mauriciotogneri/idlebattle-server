@@ -6,5 +6,6 @@ public enum Event
     CREATE_PRIVATE,
     JOIN_PRIVATE,
     WAITING,
-    MATCH_STARTED
+    MATCH_STARTED,
+    INVALID_MATCH_ID
 }

@@ -3,6 +3,7 @@ package com.mauriciotogneri.idlebattle.game;
 import com.mauriciotogneri.idlebattle.server.Server;
 
 import java.util.List;
+import java.util.UUID;
 
 public class Match
 {
@@ -21,5 +22,10 @@ public class Match
         {
             Server.send(player.webSocket, Message.matchStarted(id));
         }
+    }
+
+    public static String newId()
+    {
+        return UUID.randomUUID().toString();
     }
 }

@@ -18,14 +18,26 @@ public class Message
     }
 
     @NotNull
-    public static Message waiting()
+    public static Message waitingPublic()
     {
         return new Message(Event.WAITING, null, null);
+    }
+
+    @NotNull
+    public static Message waitingPrivate(String matchId)
+    {
+        return new Message(Event.WAITING, null, matchId);
     }
 
     @NotNull
     public static Message matchStarted(String matchId)
     {
         return new Message(Event.MATCH_STARTED, null, matchId);
+    }
+
+    @NotNull
+    public static Message invalidMatchId(String matchId)
+    {
+        return new Message(Event.INVALID_MATCH_ID, null, matchId);
     }
 }

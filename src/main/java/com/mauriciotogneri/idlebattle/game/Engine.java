@@ -32,8 +32,8 @@ public class Engine
             WaitingPublicPlayer waitingPlayer = waitingPublic.remove(0);
 
             String matchId = Match.newId();
-            Player player1 = new Player(waitingPlayer.webSocket, Constants.DIRECTION_UP, waitingPlayer.name);
-            Player player2 = new Player(webSocket, Constants.DIRECTION_DOWN, playerName);
+            Player player1 = new Player(waitingPlayer.webSocket, waitingPlayer.name, Constants.DIRECTION_UP);
+            Player player2 = new Player(webSocket, playerName, Constants.DIRECTION_DOWN);
 
             startMatch(matchId, player1, player2);
         }
@@ -60,8 +60,8 @@ public class Engine
         {
             waitingPrivate.remove(waitingPlayer);
 
-            Player player1 = new Player(waitingPlayer.webSocket, Constants.DIRECTION_UP, waitingPlayer.name);
-            Player player2 = new Player(webSocket, Constants.DIRECTION_DOWN, playerName);
+            Player player1 = new Player(waitingPlayer.webSocket, waitingPlayer.name, Constants.DIRECTION_UP);
+            Player player2 = new Player(webSocket, playerName, Constants.DIRECTION_DOWN);
 
             startMatch(matchId, player1, player2);
         }
@@ -87,7 +87,7 @@ public class Engine
 
     public void increaseAttack(WebSocket webSocket, String matchId)
     {
-        Match match = matches.get(matchId);
+        Match match = getMatch(webSocket);
 
         if (match != null)
         {

@@ -2,6 +2,7 @@ package com.mauriciotogneri.idlebattle.game;
 
 import com.mauriciotogneri.idlebattle.messages.MatchStatus;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
+import com.mauriciotogneri.idlebattle.messages.PlayerIdentity;
 import com.mauriciotogneri.idlebattle.server.Server;
 import com.mauriciotogneri.idlebattle.types.MatchState;
 
@@ -17,6 +18,7 @@ public class Match
 {
     private final String id;
     private final List<Player> players;
+    private final List<PlayerIdentity> identities;
     private final List<Lane> lanes;
     private MatchState state = MatchState.CREATED;
 
@@ -24,6 +26,8 @@ public class Match
     {
         this.id = id;
         this.players = players;
+
+        this.identities = playerIdentities(players);
 
         this.lanes = new ArrayList<>();
         this.lanes.add(new Lane(0));
@@ -155,7 +159,20 @@ public class Match
     @NotNull
     private MatchStatus status()
     {
-        return new MatchStatus(id);
+        return new MatchStatus(id, identities, lanes);
+    }
+
+    @NotNull
+    private List<PlayerIdentity> playerIdentities(@NotNull List<Player> players)
+    {
+        List<PlayerIdentity> result = new ArrayList<>();
+
+        for (Player player : players)
+        {
+            result.add(player.identity());
+        }
+
+        return result;
     }
 
     public void update(double dt)

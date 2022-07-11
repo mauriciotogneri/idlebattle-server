@@ -4,9 +4,6 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
@@ -55,25 +52,5 @@ public class IdleBattleServer extends WebSocketServer
         System.out.println("Server started!");
         setConnectionLostTimeout(0);
         setConnectionLostTimeout(100);
-    }
-
-    public static void main(String[] args) throws InterruptedException, IOException
-    {
-        IdleBattleServer server = new IdleBattleServer(8888);
-        server.start();
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
-        while (true)
-        {
-            String in = reader.readLine();
-            server.broadcast(in);
-
-            if (in.equals("exit"))
-            {
-                server.stop(1000);
-                break;
-            }
-        }
     }
 }

@@ -44,6 +44,12 @@ public class Message
     }
 
     @NotNull
+    public static Message playerUpdate()
+    {
+        return new Message(Event.PLAYER_UPDATE, null, null, null, null);
+    }
+
+    @NotNull
     public static Message matchUpdate(String matchId)
     {
         return new Message(Event.MATCH_UPDATE, null, matchId, null, null);

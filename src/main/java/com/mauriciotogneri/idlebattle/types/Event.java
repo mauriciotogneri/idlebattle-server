@@ -13,6 +13,7 @@ public enum Event
     // send
     WAITING,
     MATCH_STARTED,
+    PLAYER_UPDATE,
     MATCH_UPDATE,
     INVALID_MATCH_ID,
     INVALID_PLAYER_NAME,

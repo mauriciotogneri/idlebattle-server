@@ -1,5 +1,6 @@
 package com.mauriciotogneri.idlebattle.game;
 
+import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 import com.mauriciotogneri.idlebattle.messages.MatchStatus;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.messages.PlayerIdentity;
@@ -20,9 +21,11 @@ public class Match
     private final String id;
     private final List<Player> players;
     private final List<Lane> lanes;
+    private final MatchConfiguration configuration;
     private MatchState state = MatchState.CREATED;
+    private double totalTime = 0;
 
-    public Match(String id, List<Player> players)
+    public Match(String id, List<Player> players, MatchConfiguration configuration)
     {
         this.id = id;
         this.players = players;
@@ -33,6 +36,8 @@ public class Match
         this.lanes.add(new Lane(2));
         this.lanes.add(new Lane(3));
         this.lanes.add(new Lane(4));
+
+        this.configuration = configuration;
     }
 
     public String id()
@@ -208,18 +213,13 @@ public class Match
 
     public void update(double dt)
     {
-        Player winner = null;
-
         if (state == MatchState.RUNNING)
         {
+            totalTime += dt;
+
             for (Player player : players)
             {
                 player.update(dt);
-
-                if (player.hasWon())
-                {
-                    winner = player;
-                }
             }
 
             for (Lane lane : lanes)
@@ -227,23 +227,51 @@ public class Match
                 lane.update(dt);
             }
 
-            if (winner != null)
+            if (!checkWinnerByPoints())
             {
-                for (Player player : players)
+                if (totalTime >= configuration.timeout)
                 {
-                    if (player == winner)
-                    {
-                        player.send(OutputMessage.matchFinished(FinishState.WON));
-                    }
-                    else
-                    {
-                        player.send(OutputMessage.matchFinished(FinishState.LOST));
-                    }
+                    checkWinnerByTerritory();
                 }
-
-                state = MatchState.FINISHED;
             }
         }
+    }
+
+    private boolean checkWinnerByPoints()
+    {
+        Player winner = null;
+
+        for (Player player : players)
+        {
+            if (player.hasWon(configuration.winnerLimit()))
+            {
+                winner = player;
+            }
+        }
+
+        if (winner != null)
+        {
+            for (Player player : players)
+            {
+                if (player == winner)
+                {
+                    player.send(OutputMessage.matchFinished(FinishState.WON));
+                }
+                else
+                {
+                    player.send(OutputMessage.matchFinished(FinishState.LOST));
+                }
+            }
+
+            state = MatchState.FINISHED;
+        }
+
+        return (winner != null);
+    }
+
+    private void checkWinnerByTerritory()
+    {
+        // TODO
     }
 
     public static String newId()

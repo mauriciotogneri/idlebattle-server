@@ -42,9 +42,9 @@ public class Player
         return (this.webSocket == webSocket);
     }
 
-    public boolean hasWon()
+    public boolean hasWon(int limit)
     {
-        return points >= 3;
+        return points >= limit;
     }
 
     public void increaseMine()
@@ -93,6 +93,11 @@ public class Player
     public void update(double dt)
     {
         money += mineLevel * Constants.MONEY_RATE * dt;
+    }
+
+    public void addPoint()
+    {
+        points++;
     }
 
     public void send(OutputMessage message)

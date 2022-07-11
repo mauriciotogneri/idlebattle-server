@@ -1,6 +1,7 @@
 package com.mauriciotogneri.idlebattle.game;
 
 import com.mauriciotogneri.idlebattle.app.Constants;
+import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.server.Logger;
 import com.mauriciotogneri.idlebattle.server.Server;
@@ -161,7 +162,7 @@ public class Engine
         players.add(player1);
         players.add(player2);
 
-        Match match = new Match(matchId, players);
+        Match match = new Match(matchId, players, MatchConfiguration.create());
         match.start();
 
         matches.put(matchId, match);

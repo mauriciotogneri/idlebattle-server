@@ -16,6 +16,11 @@ public class Units
         this.damagePerUnit = damagePerUnit;
     }
 
+    public double totalDamage()
+    {
+        return amount * ((amount / Constants.BLOCK_MULTIPLIER) + 1) * damagePerUnit;
+    }
+
     public void update(double dt)
     {
         progress += dt * Constants.UNIT_SPEED;

@@ -23,7 +23,7 @@ public class Main
                 Thread.sleep(Constants.GAME_LOOP_STEP);
 
                 long currentTimestamp = System.nanoTime();
-                double dt = (currentTimestamp - lastTimestamp) / 1000000d;
+                double dt = (currentTimestamp - lastTimestamp) / 1000000000d; // in seconds
                 lastTimestamp = currentTimestamp;
 
                 messageHandler.update(dt);

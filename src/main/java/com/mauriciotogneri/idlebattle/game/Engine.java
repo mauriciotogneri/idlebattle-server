@@ -87,7 +87,7 @@ public class Engine
 
     public void increaseAttack(WebSocket webSocket, String matchId)
     {
-        Match match = getMatch(webSocket);
+        Match match = matches.get(matchId);
 
         if (match != null)
         {

@@ -19,7 +19,6 @@ public class Match
 {
     private final String id;
     private final List<Player> players;
-    private final List<PlayerIdentity> identities;
     private final List<Lane> lanes;
     private MatchState state = MatchState.CREATED;
 
@@ -27,8 +26,6 @@ public class Match
     {
         this.id = id;
         this.players = players;
-
-        this.identities = playerIdentities(players);
 
         this.lanes = new ArrayList<>();
         this.lanes.add(new Lane(0));
@@ -52,7 +49,7 @@ public class Match
     {
         for (Player player : players)
         {
-            player.send(OutputMessage.matchStarted(status(), player.status()));
+            player.send(OutputMessage.matchStarted(status(player), player.status()));
         }
 
         state = MatchState.RUNNING;
@@ -132,7 +129,7 @@ public class Match
                 {
                     Units units = player.buyUnits(amount);
                     lane.launchUnits(units);
-                    broadcast(OutputMessage.matchUpdate(status(), player.status()));
+                    broadcast(OutputMessage.matchUpdate(status(player), player.status()));
                 }
                 else
                 {
@@ -186,19 +183,19 @@ public class Match
     }
 
     @NotNull
-    private MatchStatus status()
+    private MatchStatus status(Player self)
     {
-        return new MatchStatus(id, identities, lanes);
+        return new MatchStatus(id, playerIdentities(players, self), lanes);
     }
 
     @NotNull
-    private List<PlayerIdentity> playerIdentities(@NotNull List<Player> players)
+    private List<PlayerIdentity> playerIdentities(@NotNull List<Player> players, Player self)
     {
         List<PlayerIdentity> result = new ArrayList<>();
 
         for (Player player : players)
         {
-            result.add(player.identity());
+            result.add(player.identity(player == self));
         }
 
         return result;

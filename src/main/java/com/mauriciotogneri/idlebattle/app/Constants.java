@@ -5,8 +5,13 @@ public class Constants
     public static final int GAME_LOOP_STEP = 1000 / 60;
 
     public static int LANES = 5;
+    public static double INITIAL_WALL_VALUE = 0.5;
     public static int SUDDEN_DEATH_TIMEOUT = 60 * 5; // in seconds
 
+    public static int INITIAL_MINE = 1;
+    public static int INITIAL_ATTACK = 1;
+    public static int MINE_COST_MULTIPLIER = 100;
+    public static int ATTACK_COST_MULTIPLIER = 100;
     public static int INITIAL_MONEY = 500;
     public static int MONEY_RATE = 20;
     public static int LOST_LANE_MONEY = 500;

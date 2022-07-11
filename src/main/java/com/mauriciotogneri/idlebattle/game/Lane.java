@@ -1,5 +1,7 @@
 package com.mauriciotogneri.idlebattle.game;
 
+import com.mauriciotogneri.idlebattle.app.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +9,7 @@ public class Lane
 {
     private final int id;
     private boolean enabled = true;
-    private double wall = 0.5;
+    private double wall = Constants.INITIAL_WALL_VALUE;
     private double inertia = 0;
     private final List<Units> units = new ArrayList<>();
 

@@ -31,11 +31,11 @@ public class Match
         this.players = players;
 
         this.lanes = new ArrayList<>();
-        this.lanes.add(new Lane(0));
-        this.lanes.add(new Lane(1));
-        this.lanes.add(new Lane(2));
-        this.lanes.add(new Lane(3));
-        this.lanes.add(new Lane(4));
+
+        for (int i = 0; i < configuration.lanes; i++)
+        {
+            this.lanes.add(new Lane(i));
+        }
 
         this.configuration = configuration;
     }

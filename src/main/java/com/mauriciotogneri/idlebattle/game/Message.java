@@ -1,5 +1,7 @@
 package com.mauriciotogneri.idlebattle.game;
 
+import com.mauriciotogneri.idlebattle.types.Event;
+
 import org.jetbrains.annotations.NotNull;
 
 public class Message

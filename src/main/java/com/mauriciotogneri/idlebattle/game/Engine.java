@@ -1,5 +1,6 @@
 package com.mauriciotogneri.idlebattle.game;
 
+import com.mauriciotogneri.idlebattle.server.Logger;
 import com.mauriciotogneri.idlebattle.server.Server;
 
 import org.java_websocket.WebSocket;
@@ -31,9 +32,6 @@ public class Engine
 
             case JOIN_PRIVATE:
                 joinPrivate(webSocket, message);
-                break;
-
-            case MATCH_STARTED:
                 break;
         }
     }
@@ -104,6 +102,34 @@ public class Engine
         return null;
     }
 
+    @Nullable
+    private WaitingPrivatePlayer getWaitingPrivate(WebSocket webSocket)
+    {
+        for (WaitingPrivatePlayer waitingPlayer : waitingPrivate)
+        {
+            if (waitingPlayer.webSocket == webSocket)
+            {
+                return waitingPlayer;
+            }
+        }
+
+        return null;
+    }
+
+    @Nullable
+    private Match getMatch(WebSocket webSocket)
+    {
+        for (Match match : matches.values())
+        {
+            if (match.hasConnection(webSocket))
+            {
+                return match;
+            }
+        }
+
+        return null;
+    }
+
     private void startMatch(String matchId, @NotNull Player player1, @NotNull Player player2)
     {
         List<Player> players = new ArrayList<>();
@@ -118,5 +144,34 @@ public class Engine
 
     public synchronized void onClose(@NotNull WebSocket webSocket)
     {
+        if (!waitingPublic.isEmpty() && waitingPublic.get(0).webSocket == webSocket)
+        {
+            WaitingPublicPlayer waitingPlayer = waitingPublic.remove(0);
+            Logger.onDisconnected(webSocket, String.format("Waiting for public match: (%s)", waitingPlayer.name));
+
+            return;
+        }
+
+        WaitingPrivatePlayer waitingPlayer = getWaitingPrivate(webSocket);
+
+        if (waitingPlayer != null)
+        {
+            waitingPrivate.remove(waitingPlayer);
+            Logger.onDisconnected(webSocket, String.format("Waiting for private match: (%s, %s)", waitingPlayer.name, waitingPlayer.matchId));
+
+            return;
+        }
+
+        Match match = getMatch(webSocket);
+
+        if (match != null)
+        {
+            Player player = match.onPlayerDisconnected(webSocket);
+
+            if (player != null)
+            {
+                Logger.onDisconnected(webSocket, String.format("From match: (%s, %s, %s)", match.id(), player.name, player.index));
+            }
+        }
     }
 }

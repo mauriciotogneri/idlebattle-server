@@ -26,13 +26,13 @@ public class Server extends WebSocketServer
     @Override
     public void onOpen(@NotNull WebSocket webSocket, @NotNull ClientHandshake clientHandshake)
     {
-        System.out.println(webSocket.hashCode() + " [CONNECTED]");
+        Logger.onConnected(webSocket);
     }
 
     @Override
     public void onMessage(@NotNull WebSocket webSocket, String message)
     {
-        System.out.println(webSocket.hashCode() + " [RECEIVED] " + message);
+        Logger.onMessageReceived(webSocket, message);
         engine.onMessage(webSocket, Json.message(message));
     }
 
@@ -45,20 +45,20 @@ public class Server extends WebSocketServer
     @Override
     public void onClose(@NotNull WebSocket webSocket, int code, String reason, boolean remote)
     {
-        System.out.println(webSocket.hashCode() + " [CLOSED]");
+        Logger.onClosed(webSocket);
         engine.onClose(webSocket);
     }
 
     @Override
     public void onError(WebSocket webSocket, @NotNull Exception e)
     {
-        e.printStackTrace();
+        Logger.onError(webSocket, e);
     }
 
     @Override
     public void onStart()
     {
-        System.out.println("Server started!");
+        Logger.log("Server started!");
         setConnectionLostTimeout(0);
         setConnectionLostTimeout(100);
     }
@@ -67,6 +67,6 @@ public class Server extends WebSocketServer
     {
         String text = Json.string(message);
         webSocket.send(text);
-        System.out.println(webSocket.hashCode() + " [SENT]     " + text);
+        Logger.onMessageSent(webSocket, text);
     }
 }

@@ -11,6 +11,8 @@ public class Player
     private final WebSocket webSocket;
     private final int index;
     private final String name;
+
+    private int points = 0;
     private double money = 0;
     private int mineLevel = 0;
     private int attackLevel = 0;
@@ -81,6 +83,7 @@ public class Player
         return new PlayerStatus(
                 index,
                 name,
+                points,
                 (int) money,
                 mineLevel,
                 attackLevel

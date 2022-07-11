@@ -1,7 +1,5 @@
 package com.mauriciotogneri.idlebattle;
 
-import com.google.gson.Gson;
-
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -14,26 +12,25 @@ import java.nio.charset.StandardCharsets;
 public class Server extends WebSocketServer
 {
     private final Engine engine;
-    private final Gson gson;
 
     public Server(int port, Engine engine)
     {
         super(new InetSocketAddress(port));
 
         this.engine = engine;
-        this.gson = new Gson();
     }
 
     @Override
     public void onOpen(@NotNull WebSocket webSocket, @NotNull ClientHandshake clientHandshake)
     {
-        System.out.println(webSocket.getRemoteSocketAddress().getAddress().getHostAddress() + " entered the room!");
+        System.out.println(webSocket.hashCode() + " [CONNECTED]");
     }
 
     @Override
     public void onMessage(@NotNull WebSocket webSocket, String message)
     {
-        engine.onMessage(webSocket, gson.fromJson(message, Message.class));
+        System.out.println(webSocket.hashCode() + " [RECEIVED] " + message);
+        engine.onMessage(webSocket, Json.message(message));
     }
 
     @Override
@@ -45,6 +42,7 @@ public class Server extends WebSocketServer
     @Override
     public void onClose(@NotNull WebSocket webSocket, int code, String reason, boolean remote)
     {
+        System.out.println(webSocket.hashCode() + " [CLOSED]");
         engine.onClose(webSocket);
     }
 

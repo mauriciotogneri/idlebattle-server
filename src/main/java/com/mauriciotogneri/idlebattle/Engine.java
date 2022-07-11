@@ -7,13 +7,17 @@ public class Engine
 {
     public void onMessage(@NotNull WebSocket webSocket, @NotNull Message message)
     {
-        System.out.println(webSocket.hashCode() + " [RECEIVED] " + message);
-        webSocket.send(message.event);
-        System.out.println(webSocket.hashCode() + " [SENT]     " + message.event);
+        send(webSocket, message);
     }
 
     public void onClose(@NotNull WebSocket webSocket)
     {
-        System.out.println(webSocket.hashCode() + " [CLOSED]");
+    }
+
+    public void send(@NotNull WebSocket webSocket, Message message)
+    {
+        String text = Json.string(message);
+        webSocket.send(text);
+        System.out.println(webSocket.hashCode() + " [SENT]     " + text);
     }
 }

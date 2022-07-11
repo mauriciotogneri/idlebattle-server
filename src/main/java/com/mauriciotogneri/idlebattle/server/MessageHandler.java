@@ -159,4 +159,9 @@ public class MessageHandler
     {
         return (value != null);
     }
+
+    public synchronized void update(double dt)
+    {
+        engine.update(dt);
+    }
 }

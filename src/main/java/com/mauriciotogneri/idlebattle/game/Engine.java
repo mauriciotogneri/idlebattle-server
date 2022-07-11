@@ -207,4 +207,12 @@ public class Engine
 
         Logger.log(webSocket, "Connection not found in any entity");
     }
+
+    public void update(double dt)
+    {
+        for (Match match : matches.values())
+        {
+            match.update(dt);
+        }
+    }
 }

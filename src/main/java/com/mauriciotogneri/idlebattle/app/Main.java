@@ -6,28 +6,31 @@ import com.mauriciotogneri.idlebattle.server.Server;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 public class Main
 {
-    public static void main(@NotNull String[] args) throws InterruptedException, IOException
+    public static void main(@NotNull String[] args)
     {
-        Server server = new Server(Integer.parseInt(args[0]), new MessageHandler(new Engine()));
+        MessageHandler messageHandler = new MessageHandler(new Engine());
+        Server server = new Server(Integer.parseInt(args[0]), messageHandler);
         server.start();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        long lastTimestamp = System.nanoTime();
 
         while (true)
         {
-            String in = reader.readLine();
-            server.broadcast(in);
-
-            if (in.equals("exit"))
+            try
             {
-                server.stop(1000);
-                break;
+                Thread.sleep(Constants.GAME_LOOP_STEP);
+
+                long currentTimestamp = System.nanoTime();
+                double dt = (currentTimestamp - lastTimestamp) / 1000000d;
+                lastTimestamp = currentTimestamp;
+
+                messageHandler.update(dt);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
             }
         }
     }

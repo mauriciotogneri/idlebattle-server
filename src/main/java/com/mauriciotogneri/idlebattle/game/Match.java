@@ -12,13 +12,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class Match implements Runnable
+public class Match
 {
     private final String id;
     private final List<Player> players;
     private MatchState state = MatchState.CREATED;
-
-    private static final int GAME_LOOP_STEP = 1000;
 
     public Match(String id, List<Player> players)
     {
@@ -44,8 +42,6 @@ public class Match implements Runnable
         }
 
         state = MatchState.RUNNING;
-
-        new Thread(this).start();
     }
 
     public boolean hasConnection(WebSocket webSocket)
@@ -155,20 +151,13 @@ public class Match implements Runnable
         return new MatchStatus(id);
     }
 
-    @Override
-    public void run()
+    public void update(double dt)
     {
-        while (state == MatchState.RUNNING)
+        if (state == MatchState.RUNNING)
         {
-            // TODO: run game logic
-
-            try
+            for (Player player : players)
             {
-                Thread.sleep(GAME_LOOP_STEP);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
+                player.update(dt);
             }
         }
     }

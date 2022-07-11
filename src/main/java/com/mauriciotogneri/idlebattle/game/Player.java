@@ -81,8 +81,6 @@ public class Player
     public PlayerStatus status()
     {
         return new PlayerStatus(
-                index,
-                name,
                 points,
                 (int) money,
                 mineLevel,

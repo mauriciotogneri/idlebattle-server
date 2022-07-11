@@ -41,6 +41,11 @@ public class Player
         return (this.webSocket == webSocket);
     }
 
+    public boolean hasWon()
+    {
+        return points >= 3;
+    }
+
     public void increaseMine()
     {
         int cost = mineLevel * 100;

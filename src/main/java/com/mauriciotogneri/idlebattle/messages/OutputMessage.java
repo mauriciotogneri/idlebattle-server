@@ -1,5 +1,6 @@
 package com.mauriciotogneri.idlebattle.messages;
 
+import com.mauriciotogneri.idlebattle.types.FinishState;
 import com.mauriciotogneri.idlebattle.types.OutputEvent;
 
 import org.jetbrains.annotations.NotNull;
@@ -11,6 +12,7 @@ public class OutputMessage
     public final String matchId;
     public final Integer laneId;
     public final Integer amount;
+    public final FinishState finishState;
     public final PlayerStatus playerStatus;
     public final MatchStatus matchStatus;
 
@@ -19,6 +21,7 @@ public class OutputMessage
                           String matchId,
                           Integer laneId,
                           Integer amount,
+                          FinishState finishState,
                           PlayerStatus playerStatus,
                           MatchStatus matchStatus)
     {
@@ -27,44 +30,99 @@ public class OutputMessage
         this.matchId = matchId;
         this.laneId = laneId;
         this.amount = amount;
+        this.finishState = finishState;
         this.playerStatus = playerStatus;
         this.matchStatus = matchStatus;
     }
 
     public OutputMessage withPlayerName(String playerName)
     {
-        return new OutputMessage(event, playerName, matchId, laneId, amount, playerStatus, matchStatus);
+        return new OutputMessage(event,
+                                 playerName,
+                                 matchId,
+                                 laneId,
+                                 amount,
+                                 finishState,
+                                 playerStatus,
+                                 matchStatus);
     }
 
     public OutputMessage withMatchId(String matchId)
     {
-        return new OutputMessage(event, playerName, matchId, laneId, amount, playerStatus, matchStatus);
+        return new OutputMessage(event,
+                                 playerName,
+                                 matchId,
+                                 laneId,
+                                 amount,
+                                 finishState,
+                                 playerStatus,
+                                 matchStatus);
     }
 
     public OutputMessage withLaneId(Integer laneId)
     {
-        return new OutputMessage(event, playerName, matchId, laneId, amount, playerStatus, matchStatus);
+        return new OutputMessage(event,
+                                 playerName,
+                                 matchId,
+                                 laneId,
+                                 amount,
+                                 finishState,
+                                 playerStatus,
+                                 matchStatus);
     }
 
     public OutputMessage withAmount(Integer amount)
     {
-        return new OutputMessage(event, playerName, matchId, laneId, amount, playerStatus, matchStatus);
+        return new OutputMessage(event,
+                                 playerName,
+                                 matchId,
+                                 laneId,
+                                 amount,
+                                 finishState,
+                                 playerStatus,
+                                 matchStatus);
     }
 
     public OutputMessage withPlayerStatus(PlayerStatus playerStatus)
     {
-        return new OutputMessage(event, playerName, matchId, laneId, amount, playerStatus, matchStatus);
+        return new OutputMessage(event,
+                                 playerName,
+                                 matchId,
+                                 laneId,
+                                 amount,
+                                 finishState,
+                                 playerStatus,
+                                 matchStatus);
     }
 
     public OutputMessage withMatchStatus(MatchStatus matchStatus)
     {
-        return new OutputMessage(event, playerName, matchId, laneId, amount, playerStatus, matchStatus);
+        return new OutputMessage(event,
+                                 playerName,
+                                 matchId,
+                                 laneId,
+                                 amount,
+                                 finishState,
+                                 playerStatus,
+                                 matchStatus);
+    }
+
+    public OutputMessage withFinishState(FinishState finishState)
+    {
+        return new OutputMessage(event,
+                                 playerName,
+                                 matchId,
+                                 laneId,
+                                 amount,
+                                 finishState,
+                                 playerStatus,
+                                 matchStatus);
     }
 
     @NotNull
     public static OutputMessage create(OutputEvent event)
     {
-        return new OutputMessage(event, null, null, null, null, null, null);
+        return new OutputMessage(event, null, null, null, null, null, null, null);
     }
 
     @NotNull
@@ -99,6 +157,12 @@ public class OutputMessage
         return create(OutputEvent.MATCH_UPDATE)
                 .withMatchStatus(matchStatus)
                 .withPlayerStatus(playerStatus);
+    }
+
+    @NotNull
+    public static OutputMessage matchFinished(FinishState finishState)
+    {
+        return create(OutputEvent.MATCH_FINISHED).withFinishState(finishState);
     }
 
     @NotNull

@@ -195,7 +195,7 @@ public class Engine
 
             if (!match.hasPlayers())
             {
-                matches.remove(match.id());
+                removeMatch(match);
             }
 
             if (player != null)
@@ -214,6 +214,16 @@ public class Engine
         for (Match match : matches.values())
         {
             match.update(dt);
+
+            if (match.isFinished())
+            {
+                removeMatch(match);
+            }
         }
+    }
+
+    private void removeMatch(@NotNull Match match)
+    {
+        matches.remove(match.id());
     }
 }

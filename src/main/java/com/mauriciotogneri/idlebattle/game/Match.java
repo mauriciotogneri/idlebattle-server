@@ -4,6 +4,7 @@ import com.mauriciotogneri.idlebattle.messages.MatchStatus;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.messages.PlayerIdentity;
 import com.mauriciotogneri.idlebattle.server.Server;
+import com.mauriciotogneri.idlebattle.types.FinishState;
 import com.mauriciotogneri.idlebattle.types.MatchState;
 
 import org.java_websocket.WebSocket;
@@ -175,18 +176,47 @@ public class Match
         return result;
     }
 
+    public boolean isFinished()
+    {
+        return (state == MatchState.FINISHED);
+    }
+
     public void update(double dt)
     {
+        Player winner = null;
+
         if (state == MatchState.RUNNING)
         {
             for (Player player : players)
             {
                 player.update(dt);
+
+                if (player.hasWon())
+                {
+                    winner = player;
+                }
             }
 
             for (Lane lane : lanes)
             {
                 lane.update(dt);
+            }
+
+            if (winner != null)
+            {
+                for (Player player : players)
+                {
+                    if (player == winner)
+                    {
+                        player.send(OutputMessage.matchFinished(FinishState.WON));
+                    }
+                    else
+                    {
+                        player.send(OutputMessage.matchFinished(FinishState.LOST));
+                    }
+                }
+
+                state = MatchState.FINISHED;
             }
         }
     }

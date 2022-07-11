@@ -1,4 +1,4 @@
-package com.mauriciotogneri.idlebattle;
+package com.mauriciotogneri.idlebattle.game;
 
 public enum Event
 {

@@ -1,4 +1,6 @@
-package com.mauriciotogneri.idlebattle;
+package com.mauriciotogneri.idlebattle.game;
+
+import com.mauriciotogneri.idlebattle.server.Server;
 
 import java.util.List;
 

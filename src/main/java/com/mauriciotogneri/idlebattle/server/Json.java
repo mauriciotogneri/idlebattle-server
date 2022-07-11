@@ -1,6 +1,7 @@
-package com.mauriciotogneri.idlebattle;
+package com.mauriciotogneri.idlebattle.server;
 
 import com.google.gson.Gson;
+import com.mauriciotogneri.idlebattle.game.Message;
 
 public class Json
 {

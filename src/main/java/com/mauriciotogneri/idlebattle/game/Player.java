@@ -1,15 +1,17 @@
-package com.mauriciotogneri.idlebattle;
+package com.mauriciotogneri.idlebattle.game;
 
 import org.java_websocket.WebSocket;
 
-public class WaitingPlayer
+public class Player
 {
     public final WebSocket webSocket;
+    public final int index;
     public final String name;
 
-    public WaitingPlayer(WebSocket webSocket, String name)
+    public Player(WebSocket webSocket, int index, String name)
     {
         this.webSocket = webSocket;
+        this.index = index;
         this.name = name;
     }
 }

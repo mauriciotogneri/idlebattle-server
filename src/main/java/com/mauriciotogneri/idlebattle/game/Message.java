@@ -1,4 +1,4 @@
-package com.mauriciotogneri.idlebattle;
+package com.mauriciotogneri.idlebattle.game;
 
 import org.jetbrains.annotations.NotNull;
 

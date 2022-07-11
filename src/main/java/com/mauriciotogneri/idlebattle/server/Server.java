@@ -1,4 +1,7 @@
-package com.mauriciotogneri.idlebattle;
+package com.mauriciotogneri.idlebattle.server;
+
+import com.mauriciotogneri.idlebattle.game.Engine;
+import com.mauriciotogneri.idlebattle.game.Message;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;

@@ -1,10 +1,12 @@
 package com.mauriciotogneri.idlebattle.game;
 
+import com.mauriciotogneri.idlebattle.messages.MatchStatus;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.server.Server;
 import com.mauriciotogneri.idlebattle.types.MatchState;
 
 import org.java_websocket.WebSocket;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -117,6 +119,7 @@ public class Match implements Runnable
         if (player != null)
         {
             // TODO
+            broadcast(OutputMessage.matchUpdate(status()));
         }
         else
         {
@@ -146,9 +149,10 @@ public class Match implements Runnable
         }
     }
 
-    public static String newId()
+    @NotNull
+    private MatchStatus status()
     {
-        return UUID.randomUUID().toString();
+        return new MatchStatus(id);
     }
 
     @Override
@@ -157,8 +161,6 @@ public class Match implements Runnable
         while (state == MatchState.RUNNING)
         {
             // TODO: run game logic
-
-            broadcast(OutputMessage.matchUpdate(id));
 
             try
             {
@@ -169,5 +171,10 @@ public class Match implements Runnable
                 e.printStackTrace();
             }
         }
+    }
+
+    public static String newId()
+    {
+        return UUID.randomUUID().toString();
     }
 }

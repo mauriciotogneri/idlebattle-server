@@ -38,6 +38,18 @@ public class Message
     }
 
     @NotNull
+    public static Message matchUpdate(String matchId)
+    {
+        return new Message(Event.MATCH_UPDATE, null, matchId);
+    }
+
+    @NotNull
+    public static Message playerDisconnected(String name, String matchId)
+    {
+        return new Message(Event.PLAYER_DISCONNECTED, name, matchId);
+    }
+
+    @NotNull
     public static Message invalidMatchId(String matchId)
     {
         return new Message(Event.INVALID_MATCH_ID, null, matchId);

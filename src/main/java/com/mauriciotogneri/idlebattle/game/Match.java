@@ -54,13 +54,16 @@ public class Match implements Runnable
     @Nullable
     public Player onPlayerDisconnected(WebSocket webSocket)
     {
-        Player player = byWebSocket(webSocket);
+        Player disconnectedPlayer = byWebSocket(webSocket);
 
-        if (player != null)
+        if (disconnectedPlayer != null)
         {
-            players.remove(player);
-            // TODO: inform the other player that the enemy has disconnected
-            // TODO: if no more players connected, destroy the match
+            players.remove(disconnectedPlayer);
+
+            for (Player player : players)
+            {
+                player.send(Message.playerDisconnected(disconnectedPlayer.name(), id));
+            }
 
             if (!hasPlayers())
             {
@@ -68,7 +71,7 @@ public class Match implements Runnable
             }
         }
 
-        return player;
+        return disconnectedPlayer;
     }
 
     @Nullable
@@ -85,6 +88,14 @@ public class Match implements Runnable
         return null;
     }
 
+    private void broadcast(Message message)
+    {
+        for (Player player : players)
+        {
+            player.send(message);
+        }
+    }
+
     public static String newId()
     {
         return UUID.randomUUID().toString();
@@ -97,7 +108,7 @@ public class Match implements Runnable
         {
             // TODO: run game logic
 
-            System.out.println("GAME LOOP");
+            broadcast(Message.matchUpdate(id));
 
             try
             {

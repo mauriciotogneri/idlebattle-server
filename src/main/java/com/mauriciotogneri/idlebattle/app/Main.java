@@ -1,5 +1,6 @@
 package com.mauriciotogneri.idlebattle.app;
 
+import com.mauriciotogneri.idlebattle.Engine;
 import com.mauriciotogneri.idlebattle.Server;
 
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +13,7 @@ public class Main
 {
     public static void main(@NotNull String[] args) throws InterruptedException, IOException
     {
-        Server server = new Server(Integer.parseInt(args[0]));
+        Server server = new Server(Integer.parseInt(args[0]), new Engine());
         server.start();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));

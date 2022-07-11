@@ -80,9 +80,11 @@ public class OutputMessage
     }
 
     @NotNull
-    public static OutputMessage matchStarted(String matchId)
+    public static OutputMessage matchStarted(MatchStatus matchStatus, PlayerStatus playerStatus)
     {
-        return create(OutputEvent.MATCH_STARTED).withMatchId(matchId);
+        return create(OutputEvent.MATCH_STARTED)
+                .withMatchStatus(matchStatus)
+                .withPlayerStatus(playerStatus);
     }
 
     @NotNull

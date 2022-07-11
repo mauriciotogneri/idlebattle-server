@@ -40,7 +40,7 @@ public class Player
         return (this.webSocket == webSocket);
     }
 
-    public boolean increaseMine()
+    public void increaseMine()
     {
         int cost = mineLevel * 100;
 
@@ -48,16 +48,10 @@ public class Player
         {
             mineLevel++;
             money -= cost;
-
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 
-    public boolean increaseAttack()
+    public void increaseAttack()
     {
         int cost = attackLevel * 100;
 
@@ -65,12 +59,6 @@ public class Player
         {
             attackLevel++;
             money -= cost;
-
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 

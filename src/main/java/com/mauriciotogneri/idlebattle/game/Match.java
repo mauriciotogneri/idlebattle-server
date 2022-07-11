@@ -38,7 +38,7 @@ public class Match
     {
         for (Player player : players)
         {
-            player.send(OutputMessage.matchStarted(id));
+            player.send(OutputMessage.matchStarted(status(), player.status()));
         }
 
         state = MatchState.RUNNING;
@@ -80,10 +80,8 @@ public class Match
 
         if (player != null)
         {
-            if (player.increaseMine())
-            {
-                player.send(OutputMessage.playerUpdate(player.status()));
-            }
+            player.increaseMine();
+            player.send(OutputMessage.playerUpdate(player.status()));
         }
         else
         {
@@ -97,10 +95,8 @@ public class Match
 
         if (player != null)
         {
-            if (player.increaseAttack())
-            {
-                player.send(OutputMessage.playerUpdate(player.status()));
-            }
+            player.increaseAttack();
+            player.send(OutputMessage.playerUpdate(player.status()));
         }
         else
         {

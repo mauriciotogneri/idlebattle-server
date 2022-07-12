@@ -50,7 +50,6 @@ public class Lane
                 if (units.passedWall(wall))
                 {
                     force += units.force();
-                    sendUpdate = true;
                 }
                 else
                 {

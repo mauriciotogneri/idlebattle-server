@@ -5,7 +5,7 @@ import java.util.List;
 public class MatchStatus
 {
     private final String id;
-    private final int remainingTime;
+    private final Integer remainingTime;
     private final List<PlayerStatus> players;
     private final List<LaneStatus> lanes;
 

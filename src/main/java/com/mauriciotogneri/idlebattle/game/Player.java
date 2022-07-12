@@ -121,8 +121,8 @@ public class Player
     {
         return new PlayerStatus(
                 name,
-                direction,
                 isSelf,
+                direction,
                 points,
                 isSelf ? (int)money : null,
                 isSelf ? mineLevel : null,

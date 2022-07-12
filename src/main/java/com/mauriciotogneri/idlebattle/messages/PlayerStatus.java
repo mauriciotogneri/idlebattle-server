@@ -3,16 +3,16 @@ package com.mauriciotogneri.idlebattle.messages;
 public class PlayerStatus
 {
     private final String name;
-    private final Integer direction;
     private final Boolean isSelf;
+    private final Integer direction;
     private final Integer points;
     private final Integer money;
     private final Integer mineLevel;
     private final Integer attackLevel;
 
     public PlayerStatus(String name,
-                        Integer direction,
                         Boolean isSelf,
+                        Integer direction,
                         Integer points,
                         Integer money,
                         Integer mineLevel,

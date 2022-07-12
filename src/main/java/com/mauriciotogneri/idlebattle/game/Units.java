@@ -1,6 +1,5 @@
 package com.mauriciotogneri.idlebattle.game;
 
-import com.mauriciotogneri.idlebattle.app.Constants;
 import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,40 +16,26 @@ public class Units
         this.configuration = configuration;
         this.direction = direction;
         this.totalDamage = amount * ((amount / configuration.blockMultiplier) + 1) * damagePerUnit;
-
-        if (direction == Constants.DIRECTION_UP)
-        {
-            progress = 0;
-        }
-        else if (direction == Constants.DIRECTION_DOWN)
-        {
-            progress = 1;
-        }
+        this.progress = 0;
     }
 
-    public double force()
+    public int direction()
     {
-        return totalDamage * direction;
+        return direction;
     }
 
-    public boolean passedWall(double wall)
+    public double progress()
     {
-        if (direction == Constants.DIRECTION_UP)
-        {
-            return progress >= wall;
-        }
-        else if (direction == Constants.DIRECTION_DOWN)
-        {
-            return progress <= wall;
-        }
-        else
-        {
-            return false;
-        }
+        return progress;
+    }
+
+    public double totalDamage()
+    {
+        return totalDamage;
     }
 
     public void update(double dt)
     {
-        progress += dt * configuration.unitSpeed * direction;
+        progress += dt * configuration.unitSpeed;
     }
 }

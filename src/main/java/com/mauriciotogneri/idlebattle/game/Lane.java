@@ -1,5 +1,6 @@
 package com.mauriciotogneri.idlebattle.game;
 
+import com.mauriciotogneri.idlebattle.app.Constants;
 import com.mauriciotogneri.idlebattle.messages.LaneStatus;
 import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 
@@ -47,13 +48,27 @@ public class Lane
             {
                 units.update(dt);
 
-                if (units.passedWall(wall))
+                if (units.direction() == Constants.DIRECTION_UP)
                 {
-                    force += units.force();
+                    if (units.progress() >= wall)
+                    {
+                        force += units.totalDamage();
+                    }
+                    else
+                    {
+                        unitsAlive.add(units);
+                    }
                 }
-                else
+                else if (units.direction() == Constants.DIRECTION_DOWN)
                 {
-                    unitsAlive.add(units);
+                    if (units.progress() >= (1 - wall))
+                    {
+                        force -= units.totalDamage();
+                    }
+                    else
+                    {
+                        unitsAlive.add(units);
+                    }
                 }
             }
 
@@ -95,25 +110,17 @@ public class Lane
             {
                 if (force != 0)
                 {
-                    final double distance = dt * force * configuration.unitSpeed;
+                    double distance = dt * Math.signum(force) * configuration.unitSpeed;
 
                     if (Math.abs(force) > Math.abs(distance))
                     {
-                        System.out.printf("1a. DISTANCE: %s    FORCE: %s     WALL: %s%n", distance, force, wall);
-
                         wall += distance;
                         force -= distance;
-
-                        System.out.printf("1b. DISTANCE: %s    FORCE: %s     WALL: %s%n", distance, force, wall);
                     }
                     else
                     {
-                        System.out.printf("2a. DISTANCE: %s    FORCE: %s     WALL: %s%n", distance, force, wall);
-
                         wall += force;
                         force = 0;
-
-                        System.out.printf("2b. DISTANCE: %s    FORCE: %s     WALL: %s%n", distance, force, wall);
                     }
                 }
 

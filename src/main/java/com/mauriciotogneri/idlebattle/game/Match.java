@@ -207,7 +207,7 @@ public class Match
     {
         return new MatchStatus(
                 id,
-                totalTime,
+                configuration.matchTimeout - totalTime,
                 lanes.stream().map(Lane::status).collect(Collectors.toList())
         );
     }

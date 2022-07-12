@@ -5,7 +5,6 @@ public class Constants
     public static final int GAME_LOOP_STEP = 1000 / 60;
 
     public static int LANES = 5;
-    public static double INITIAL_WALL_VALUE = 0.5;
     public static int READY_TIMEOUT = 3; // in seconds
     public static int MATCH_TIMEOUT = 60 * 5; // in seconds
 

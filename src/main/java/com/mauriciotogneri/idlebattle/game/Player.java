@@ -100,6 +100,11 @@ public class Player
         points++;
     }
 
+    public void addMoney(double value)
+    {
+        money += value;
+    }
+
     public void send(OutputMessage message)
     {
         Server.send(webSocket, message);

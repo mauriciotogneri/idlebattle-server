@@ -133,7 +133,7 @@ public class Match
                 {
                     Units units = player.buyUnits(amount);
                     lane.launchUnits(units);
-                    broadcast(OutputMessage.matchUpdate(status(player), player.status()));
+                    sendMatchUpdate();
                 }
                 else
                 {
@@ -222,7 +222,7 @@ public class Match
                 broadcast(OutputMessage.matchStarted());
             }
         }
-        else if (state == MatchState.RUNNING)
+        else if ((state == MatchState.RUNNING) && (players.size() == 2))
         {
             totalTime += dt;
 
@@ -231,9 +231,16 @@ public class Match
                 player.update(dt);
             }
 
+            boolean sendUpdate = false;
+
             for (Lane lane : lanes)
             {
-                lane.update(dt);
+                sendUpdate |= lane.update(dt, players.get(0), players.get(1));
+            }
+
+            if (sendUpdate)
+            {
+                sendMatchUpdate();
             }
 
             if (!checkWinnerByPoints())
@@ -243,6 +250,14 @@ public class Match
                     checkWinnerByTerritory();
                 }
             }
+        }
+    }
+
+    private void sendMatchUpdate()
+    {
+        for (Player player : players)
+        {
+            player.send(OutputMessage.matchUpdate(status(player), player.status()));
         }
     }
 

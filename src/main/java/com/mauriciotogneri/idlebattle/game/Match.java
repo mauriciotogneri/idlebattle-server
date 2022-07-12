@@ -140,7 +140,7 @@ public class Match
                     if (units != null)
                     {
                         lane.launchUnits(units);
-                        sendMatchUpdate();
+                        broadcast(OutputMessage.unitsLaunched(laneId, amount, player.direction()));
                     }
                     else
                     {
@@ -162,7 +162,6 @@ public class Match
         }
         else
         {
-            sendPlayerUpdate(player);
             Server.send(webSocket, OutputMessage.invalidMatchId(id));
         }
     }

@@ -14,6 +14,7 @@ public class OutputMessage
     public final String matchId;
     public final Integer laneId;
     public final Integer amount;
+    public final Integer direction;
     public final FinishState finishState;
     public final PlayerStatus playerStatus;
     public final MatchStatus matchStatus;
@@ -25,6 +26,7 @@ public class OutputMessage
                           String matchId,
                           Integer laneId,
                           Integer amount,
+                          Integer direction,
                           FinishState finishState,
                           PlayerStatus playerStatus,
                           MatchStatus matchStatus,
@@ -36,6 +38,7 @@ public class OutputMessage
         this.matchId = matchId;
         this.laneId = laneId;
         this.amount = amount;
+        this.direction = direction;
         this.finishState = finishState;
         this.playerStatus = playerStatus;
         this.matchStatus = matchStatus;
@@ -50,6 +53,7 @@ public class OutputMessage
                                  matchId,
                                  laneId,
                                  amount,
+                                 direction,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -64,6 +68,7 @@ public class OutputMessage
                                  matchId,
                                  laneId,
                                  amount,
+                                 direction,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -78,6 +83,7 @@ public class OutputMessage
                                  matchId,
                                  laneId,
                                  amount,
+                                 direction,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -92,6 +98,22 @@ public class OutputMessage
                                  matchId,
                                  laneId,
                                  amount,
+                                 direction,
+                                 finishState,
+                                 playerStatus,
+                                 matchStatus,
+                                 configuration,
+                                 players);
+    }
+
+    public OutputMessage withDirection(Integer direction)
+    {
+        return new OutputMessage(event,
+                                 playerName,
+                                 matchId,
+                                 laneId,
+                                 amount,
+                                 direction,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -106,6 +128,7 @@ public class OutputMessage
                                  matchId,
                                  laneId,
                                  amount,
+                                 direction,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -120,6 +143,7 @@ public class OutputMessage
                                  matchId,
                                  laneId,
                                  amount,
+                                 direction,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -134,6 +158,7 @@ public class OutputMessage
                                  matchId,
                                  laneId,
                                  amount,
+                                 direction,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -148,6 +173,7 @@ public class OutputMessage
                                  matchId,
                                  laneId,
                                  amount,
+                                 direction,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -162,6 +188,7 @@ public class OutputMessage
                                  matchId,
                                  laneId,
                                  amount,
+                                 direction,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -172,7 +199,7 @@ public class OutputMessage
     @NotNull
     public static OutputMessage create(OutputEvent event)
     {
-        return new OutputMessage(event, null, null, null, null, null, null, null, null, null);
+        return new OutputMessage(event, null, null, null, null, null, null, null, null, null, null);
     }
 
     @NotNull
@@ -219,6 +246,15 @@ public class OutputMessage
         return create(OutputEvent.MATCH_UPDATE)
                 .withMatchStatus(matchStatus)
                 .withPlayerStatus(playerStatus);
+    }
+
+    @NotNull
+    public static OutputMessage unitsLaunched(int laneId, int amount, int direction)
+    {
+        return create(OutputEvent.UNITS_LAUNCHED)
+                .withLaneId(laneId)
+                .withAmount(amount)
+                .withDirection(direction);
     }
 
     @NotNull

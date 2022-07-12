@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Match
 {
@@ -99,7 +100,7 @@ public class Match
         if (player != null)
         {
             player.increaseMine(configuration.mineCostMultiplier);
-            player.send(OutputMessage.playerUpdate(player.status()));
+            sendPlayerUpdate(player);
         }
         else
         {
@@ -114,7 +115,7 @@ public class Match
         if (player != null)
         {
             player.increaseAttack(configuration.attackCostMultiplier);
-            player.send(OutputMessage.playerUpdate(player.status()));
+            sendPlayerUpdate(player);
         }
         else
         {
@@ -135,21 +136,33 @@ public class Match
                 if (amount > 0)
                 {
                     Units units = player.buyUnits(configuration, amount);
-                    lane.launchUnits(units);
-                    sendMatchUpdate();
+
+                    if (units != null)
+                    {
+                        lane.launchUnits(units);
+                        sendMatchUpdate();
+                    }
+                    else
+                    {
+                        sendPlayerUpdate(player);
+                        Server.send(webSocket, OutputMessage.invalidAmount(amount));
+                    }
                 }
                 else
                 {
+                    sendPlayerUpdate(player);
                     Server.send(webSocket, OutputMessage.invalidAmount(amount));
                 }
             }
             else
             {
+                sendPlayerUpdate(player);
                 Server.send(webSocket, OutputMessage.invalidLaneId(laneId));
             }
         }
         else
         {
+            sendPlayerUpdate(player);
             Server.send(webSocket, OutputMessage.invalidMatchId(id));
         }
     }
@@ -192,7 +205,11 @@ public class Match
     @NotNull
     private MatchStatus status()
     {
-        return new MatchStatus(id, totalTime, lanes);
+        return new MatchStatus(
+                id,
+                totalTime,
+                lanes.stream().map(Lane::status).collect(Collectors.toList())
+        );
     }
 
     @NotNull
@@ -262,6 +279,11 @@ public class Match
         {
             player.send(OutputMessage.matchUpdate(status(), player.status()));
         }
+    }
+
+    private void sendPlayerUpdate(@NotNull Player player)
+    {
+        player.send(OutputMessage.playerUpdate(player.status()));
     }
 
     private boolean checkWinnerByPoints()

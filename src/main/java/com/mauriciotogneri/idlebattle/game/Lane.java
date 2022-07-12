@@ -1,6 +1,6 @@
 package com.mauriciotogneri.idlebattle.game;
 
-import com.mauriciotogneri.idlebattle.app.Constants;
+import com.mauriciotogneri.idlebattle.messages.LaneStatus;
 import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 
 import java.util.ArrayList;
@@ -115,5 +115,10 @@ public class Lane
         }
 
         return sendUpdate;
+    }
+
+    public LaneStatus status()
+    {
+        return new LaneStatus(enabled, rewardEnabled);
     }
 }

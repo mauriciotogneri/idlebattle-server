@@ -295,7 +295,39 @@ public class Match
 
     private void checkWinnerByTerritory()
     {
-        // TODO
+        if (players.size() == 2)
+        {
+            Player player1 = players.get(0);
+            Player player2 = players.get(1);
+
+            int player1Percentage = player1Percentage();
+            int player2Percentage = 100 - player1Percentage;
+
+            if (player1Percentage > player2Percentage)
+            {
+                player1.send(OutputMessage.matchFinished(FinishState.WON));
+                player2.send(OutputMessage.matchFinished(FinishState.LOST));
+                state = MatchState.FINISHED;
+            }
+            else if (player2Percentage > player1Percentage)
+            {
+                player2.send(OutputMessage.matchFinished(FinishState.WON));
+                player1.send(OutputMessage.matchFinished(FinishState.LOST));
+                state = MatchState.FINISHED;
+            }
+        }
+    }
+
+    private int player1Percentage()
+    {
+        double sum = 0;
+
+        for (Lane lane : lanes)
+        {
+            sum += lane.wall();
+        }
+
+        return (int) Math.round((sum / configuration.lanes) * 100);
     }
 
     public static String newId()

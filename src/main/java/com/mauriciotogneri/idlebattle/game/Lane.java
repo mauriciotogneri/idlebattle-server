@@ -18,6 +18,11 @@ public class Lane
         return enabled;
     }
 
+    public double wall()
+    {
+        return wall;
+    }
+
     public void launchUnits(Units units)
     {
         this.units.add(units);
@@ -26,76 +31,80 @@ public class Lane
     public boolean update(double dt, Player player1, Player player2)
     {
         boolean sendUpdate = false;
-        List<Units> unitsAlive = new ArrayList<>();
 
-        for (Units units : units)
+        if (enabled)
         {
-            units.update(dt);
+            List<Units> unitsAlive = new ArrayList<>();
 
-            if (units.passedWall(wall))
+            for (Units units : units)
             {
-                force += units.force();
-                sendUpdate = true;
-            }
-            else
-            {
-                unitsAlive.add(units);
-            }
-        }
+                units.update(dt);
 
-        if (rewardEnabled)
-        {
-            if (wall >= 0.75)
-            {
-                sendUpdate = true;
-                rewardEnabled = false;
-                player1.addMoney(Constants.LINE_REWARD);
-            }
-            else if (wall <= 0.25)
-            {
-                sendUpdate = true;
-                rewardEnabled = false;
-                player2.addMoney(Constants.LINE_REWARD);
-            }
-        }
-
-        if (wall >= 1)
-        {
-            sendUpdate = true;
-            wall = 1;
-            player1.addPoint();
-            player2.addMoney(Constants.LOST_LANE_MONEY);
-            enabled = false;
-            units.clear();
-        }
-        else if (wall <= 0)
-        {
-            sendUpdate = true;
-            wall = 0;
-            player2.addPoint();
-            player1.addMoney(Constants.LOST_LANE_MONEY);
-            enabled = false;
-            units.clear();
-        }
-        else
-        {
-            if (force != 0)
-            {
-                final double distance = dt * force * Constants.UNIT_SPEED;
-
-                if (Math.abs(force) > Math.abs(distance))
+                if (units.passedWall(wall))
                 {
-                    wall += distance;
-                    force -= distance;
+                    force += units.force();
+                    sendUpdate = true;
                 }
                 else
                 {
-                    wall += force;
-                    force = 0;
+                    unitsAlive.add(units);
                 }
             }
 
-            units = unitsAlive;
+            if (rewardEnabled)
+            {
+                if (wall >= 0.75)
+                {
+                    sendUpdate = true;
+                    rewardEnabled = false;
+                    player1.addMoney(Constants.LINE_REWARD);
+                }
+                else if (wall <= 0.25)
+                {
+                    sendUpdate = true;
+                    rewardEnabled = false;
+                    player2.addMoney(Constants.LINE_REWARD);
+                }
+            }
+
+            if (wall >= 1)
+            {
+                sendUpdate = true;
+                wall = 1;
+                player1.addPoint();
+                player2.addMoney(Constants.LOST_LANE_MONEY);
+                enabled = false;
+                units.clear();
+            }
+            else if (wall <= 0)
+            {
+                sendUpdate = true;
+                wall = 0;
+                player2.addPoint();
+                player1.addMoney(Constants.LOST_LANE_MONEY);
+                enabled = false;
+                units.clear();
+            }
+            else
+            {
+                if (force != 0)
+                {
+                    final double distance = dt * force * Constants.UNIT_SPEED;
+
+                    if (Math.abs(force) > Math.abs(distance))
+                    {
+                        wall += distance;
+                        force -= distance;
+                    }
+                    else
+                    {
+                        wall += force;
+                        force = 0;
+                    }
+                }
+
+                units = unitsAlive;
+            }
         }
 
         return sendUpdate;

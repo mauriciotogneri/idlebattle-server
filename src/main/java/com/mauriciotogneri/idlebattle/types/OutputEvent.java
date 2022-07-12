@@ -3,6 +3,7 @@ package com.mauriciotogneri.idlebattle.types;
 public enum OutputEvent
 {
     WAITING,
+    MATCH_READY,
     MATCH_STARTED,
     PLAYER_UPDATE,
     MATCH_UPDATE,

@@ -138,11 +138,17 @@ public class OutputMessage
     }
 
     @NotNull
-    public static OutputMessage matchStarted(MatchStatus matchStatus, PlayerStatus playerStatus)
+    public static OutputMessage matchReady(MatchStatus matchStatus, PlayerStatus playerStatus)
     {
-        return create(OutputEvent.MATCH_STARTED)
+        return create(OutputEvent.MATCH_READY)
                 .withMatchStatus(matchStatus)
                 .withPlayerStatus(playerStatus);
+    }
+
+    @NotNull
+    public static OutputMessage matchStarted()
+    {
+        return create(OutputEvent.MATCH_STARTED);
     }
 
     @NotNull

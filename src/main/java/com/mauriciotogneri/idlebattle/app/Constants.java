@@ -6,7 +6,8 @@ public class Constants
 
     public static int LANES = 5;
     public static double INITIAL_WALL_VALUE = 0.5;
-    public static int SUDDEN_DEATH_TIMEOUT = 60 * 5; // in seconds
+    public static int READY_TIMEOUT = 3; // in seconds
+    public static int MATCH_TIMEOUT = 60 * 5; // in seconds
 
     public static int INITIAL_MINE = 1;
     public static int INITIAL_ATTACK = 1;

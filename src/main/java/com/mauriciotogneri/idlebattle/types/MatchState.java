@@ -2,7 +2,7 @@ package com.mauriciotogneri.idlebattle.types;
 
 public enum MatchState
 {
-    CREATED,
+    READY,
     RUNNING,
     FINISHED
 }

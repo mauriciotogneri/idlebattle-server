@@ -7,16 +7,23 @@ import org.jetbrains.annotations.NotNull;
 public class MatchConfiguration
 {
     public final int lanes;
-    public final int timeout; // in seconds
+    public final int readyTimeout; // in seconds
+    public final int matchTimeout; // in seconds
 
     public final int moneyRate;
     public final int unitCost;
     public final double unitSpeed;
 
-    private MatchConfiguration(int lanes, int timeout, int moneyRate, int unitCost, double unitSpeed)
+    private MatchConfiguration(int lanes,
+                               int readyTimeout,
+                               int matchTimeout,
+                               int moneyRate,
+                               int unitCost,
+                               double unitSpeed)
     {
         this.lanes = lanes;
-        this.timeout = timeout;
+        this.readyTimeout = readyTimeout;
+        this.matchTimeout = matchTimeout;
         this.moneyRate = moneyRate;
         this.unitCost = unitCost;
         this.unitSpeed = unitSpeed;
@@ -32,7 +39,8 @@ public class MatchConfiguration
     {
         return new MatchConfiguration(
                 Constants.LANES,
-                Constants.SUDDEN_DEATH_TIMEOUT,
+                Constants.READY_TIMEOUT,
+                Constants.MATCH_TIMEOUT,
                 Constants.MONEY_RATE,
                 Constants.UNIT_COST,
                 Constants.UNIT_SPEED

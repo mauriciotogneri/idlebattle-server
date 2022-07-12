@@ -22,10 +22,11 @@ public class Match
     private final List<Player> players;
     private final List<Lane> lanes;
     private final MatchConfiguration configuration;
-    private MatchState state = MatchState.CREATED;
+    private MatchState state = MatchState.READY;
+    private double readyTime = 0;
     private double totalTime = 0;
 
-    public Match(String id, List<Player> players, MatchConfiguration configuration)
+    public Match(String id, List<Player> players, @NotNull MatchConfiguration configuration)
     {
         this.id = id;
         this.players = players;
@@ -54,10 +55,8 @@ public class Match
     {
         for (Player player : players)
         {
-            player.send(OutputMessage.matchStarted(status(player), player.status()));
+            player.send(OutputMessage.matchReady(status(player), player.status()));
         }
-
-        state = MatchState.RUNNING;
     }
 
     public boolean hasConnection(WebSocket webSocket)
@@ -190,7 +189,7 @@ public class Match
     @NotNull
     private MatchStatus status(Player self)
     {
-        return new MatchStatus(id, playerIdentities(players, self), lanes);
+        return new MatchStatus(id, totalTime, playerIdentities(players, self), lanes);
     }
 
     @NotNull
@@ -213,7 +212,17 @@ public class Match
 
     public void update(double dt)
     {
-        if (state == MatchState.RUNNING)
+        if (state == MatchState.READY)
+        {
+            readyTime += dt;
+
+            if (readyTime >= configuration.readyTimeout)
+            {
+                state = MatchState.RUNNING;
+                broadcast(OutputMessage.matchStarted());
+            }
+        }
+        else if (state == MatchState.RUNNING)
         {
             totalTime += dt;
 
@@ -229,7 +238,7 @@ public class Match
 
             if (!checkWinnerByPoints())
             {
-                if (totalTime >= configuration.timeout)
+                if (totalTime >= configuration.matchTimeout)
                 {
                     checkWinnerByTerritory();
                 }

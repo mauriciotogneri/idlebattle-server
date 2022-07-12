@@ -35,7 +35,7 @@ public class Match
 
         for (int i = 0; i < configuration.lanes; i++)
         {
-            this.lanes.add(new Lane(i));
+            this.lanes.add(new Lane());
         }
 
         this.configuration = configuration;

@@ -7,16 +7,10 @@ import java.util.List;
 
 public class Lane
 {
-    private final int id;
     private boolean enabled = true;
     private double wall = Constants.INITIAL_WALL_VALUE;
     private double inertia = 0;
     private final List<Units> units = new ArrayList<>();
-
-    public Lane(int id)
-    {
-        this.id = id;
-    }
 
     public boolean isEnabled()
     {

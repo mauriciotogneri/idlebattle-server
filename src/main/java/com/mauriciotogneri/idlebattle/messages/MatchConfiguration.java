@@ -1,15 +1,17 @@
 package com.mauriciotogneri.idlebattle.messages;
 
-import com.mauriciotogneri.idlebattle.app.Constants;
-
 import org.jetbrains.annotations.NotNull;
+
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Properties;
 
 public class MatchConfiguration
 {
     public final int lanes;
     public final int readyTimeout; // in seconds
     public final int matchTimeout; // in seconds
-
     public final int moneyRate;
     public final int unitCost;
     public final double unitSpeed;
@@ -35,15 +37,34 @@ public class MatchConfiguration
     }
 
     @NotNull
-    public static MatchConfiguration create()
+    public static MatchConfiguration fromFile()
     {
-        return new MatchConfiguration(
-                Constants.LANES,
-                Constants.READY_TIMEOUT,
-                Constants.MATCH_TIMEOUT,
-                Constants.MONEY_RATE,
-                Constants.UNIT_COST,
-                Constants.UNIT_SPEED
-        );
+        try
+        {
+            InputStream inputStream = Files.newInputStream(Paths.get("params.properties"));
+            Properties properties = new Properties();
+            properties.load(inputStream);
+            inputStream.close();
+
+            int lanes = Integer.parseInt(properties.getProperty("LANES"));
+            int readyTimeout = Integer.parseInt(properties.getProperty("READY_TIMEOUT"));
+            int matchTimeout = Integer.parseInt(properties.getProperty("MATCH_TIMEOUT"));
+            int moneyRate = Integer.parseInt(properties.getProperty("MONEY_RATE"));
+            int unitCost = Integer.parseInt(properties.getProperty("UNIT_COST"));
+            double unitSpeed = Double.parseDouble(properties.getProperty("UNIT_SPEED"));
+
+            return new MatchConfiguration(
+                    lanes,
+                    readyTimeout,
+                    matchTimeout,
+                    moneyRate,
+                    unitCost,
+                    unitSpeed
+            );
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }

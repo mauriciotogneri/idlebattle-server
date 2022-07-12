@@ -1,12 +1,14 @@
 package com.mauriciotogneri.idlebattle.game;
 
 import com.mauriciotogneri.idlebattle.app.Constants;
+import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.messages.PlayerIdentity;
 import com.mauriciotogneri.idlebattle.messages.PlayerStatus;
 import com.mauriciotogneri.idlebattle.server.Server;
 
 import org.java_websocket.WebSocket;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Player
@@ -70,15 +72,16 @@ public class Player
     }
 
     @Nullable
-    public Units buyUnits(int amount)
+    public Units buyUnits(@NotNull MatchConfiguration configuration, int amount)
     {
-        final int totalCost = Constants.UNIT_COST * amount;
+        final int totalCost = configuration.unitCost * amount;
 
         if (money >= totalCost)
         {
             money -= totalCost;
 
             return new Units(
+                    configuration,
                     direction,
                     amount,
                     Constants.UNIT_BASE_DAMAGE * attackLevel
@@ -90,9 +93,9 @@ public class Player
         }
     }
 
-    public void update(double dt)
+    public void update(int moneyRate, double dt)
     {
-        money += mineLevel * Constants.MONEY_RATE * dt;
+        money += mineLevel * moneyRate * dt;
     }
 
     public void addPoint()

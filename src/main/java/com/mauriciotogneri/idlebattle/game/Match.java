@@ -35,7 +35,7 @@ public class Match
 
         for (int i = 0; i < configuration.lanes; i++)
         {
-            this.lanes.add(new Lane());
+            this.lanes.add(new Lane(configuration));
         }
 
         this.configuration = configuration;
@@ -131,7 +131,7 @@ public class Match
             {
                 if (amount > 0)
                 {
-                    Units units = player.buyUnits(amount);
+                    Units units = player.buyUnits(configuration, amount);
                     lane.launchUnits(units);
                     sendMatchUpdate();
                 }
@@ -228,7 +228,7 @@ public class Match
 
             for (Player player : players)
             {
-                player.update(dt);
+                player.update(configuration.moneyRate, dt);
             }
 
             boolean sendUpdate = false;

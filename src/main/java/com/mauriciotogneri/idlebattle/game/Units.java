@@ -1,20 +1,19 @@
 package com.mauriciotogneri.idlebattle.game;
 
 import com.mauriciotogneri.idlebattle.app.Constants;
+import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 
 public class Units
 {
+    private final MatchConfiguration configuration;
     private final int direction;
-    private final int amount;
-    private final double damagePerUnit;
     private final double totalDamage;
     private double progress;
 
-    public Units(int direction, int amount, double damagePerUnit)
+    public Units(MatchConfiguration configuration, int direction, int amount, double damagePerUnit)
     {
+        this.configuration = configuration;
         this.direction = direction;
-        this.amount = amount;
-        this.damagePerUnit = damagePerUnit;
         this.totalDamage = amount * ((amount / Constants.BLOCK_MULTIPLIER) + 1) * damagePerUnit;
 
         if (direction == Constants.DIRECTION_UP)
@@ -60,6 +59,6 @@ public class Units
 
     public void update(double dt)
     {
-        progress += (dt * Constants.UNIT_SPEED) * direction;
+        progress += dt * configuration.unitSpeed * direction;
     }
 }

@@ -74,7 +74,7 @@ public class Engine
 
     public void increaseMine(WebSocket webSocket, String matchId)
     {
-        Match match = matches.get(matchId);
+        Match match = getMatch(webSocket, matchId);
 
         if (match != null)
         {
@@ -88,7 +88,7 @@ public class Engine
 
     public void increaseAttack(WebSocket webSocket, String matchId)
     {
-        Match match = matches.get(matchId);
+        Match match = getMatch(webSocket, matchId);
 
         if (match != null)
         {
@@ -102,7 +102,7 @@ public class Engine
 
     public void launchUnits(WebSocket webSocket, String matchId, int laneId, int amount)
     {
-        Match match = matches.get(matchId);
+        Match match = getMatch(webSocket, matchId);
 
         if (match != null)
         {
@@ -116,7 +116,7 @@ public class Engine
 
     public void echo(WebSocket webSocket, String matchId)
     {
-        Match match = matches.get(matchId);
+        Match match = getMatch(webSocket, matchId);
 
         if (match != null)
         {
@@ -170,13 +170,28 @@ public class Engine
         return null;
     }
 
+    @Nullable
+    private Match getMatch(WebSocket webSocket, String matchId)
+    {
+        Match match = matches.get(matchId);
+
+        if ((match != null) && match.hasConnection(webSocket))
+        {
+            return match;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     private void startMatch(String matchId, @NotNull Player player1, @NotNull Player player2)
     {
         List<Player> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
 
-        Match match = new Match(matchId, players, MatchConfiguration.create());
+        Match match = new Match(matchId, players, MatchConfiguration.fromFile());
         match.start();
 
         matches.put(matchId, match);

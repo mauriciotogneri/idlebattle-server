@@ -1,17 +1,24 @@
 package com.mauriciotogneri.idlebattle.game;
 
 import com.mauriciotogneri.idlebattle.app.Constants;
+import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Lane
 {
+    private final MatchConfiguration configuration;
     private boolean enabled = true;
     private boolean rewardEnabled = true;
     private double wall = 0.5;
     private double force = 0;
     private List<Units> units = new ArrayList<>();
+
+    public Lane(MatchConfiguration configuration)
+    {
+        this.configuration = configuration;
+    }
 
     public boolean isEnabled()
     {
@@ -89,7 +96,7 @@ public class Lane
             {
                 if (force != 0)
                 {
-                    final double distance = dt * force * Constants.UNIT_SPEED;
+                    final double distance = dt * force * configuration.unitSpeed;
 
                     if (Math.abs(force) > Math.abs(distance))
                     {

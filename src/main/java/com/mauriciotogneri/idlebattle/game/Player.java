@@ -117,7 +117,7 @@ public class Player
     {
         return new PlayerStatus(
                 points,
-                (int) money,
+                money,
                 mineLevel,
                 attackLevel
         );

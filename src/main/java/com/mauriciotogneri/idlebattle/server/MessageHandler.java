@@ -44,6 +44,10 @@ public class MessageHandler
                 launchUnits(webSocket, message);
                 break;
 
+            case DISCONNECT:
+                disconnect(webSocket);
+                break;
+
             case ECHO:
                 echo(webSocket, message);
                 break;
@@ -147,6 +151,11 @@ public class MessageHandler
         {
             engine.launchUnits(webSocket, matchId, laneId, amount);
         }
+    }
+
+    private void disconnect(WebSocket webSocket)
+    {
+        engine.onClose(webSocket);
     }
 
     private void echo(WebSocket webSocket, @NotNull InputMessage message)

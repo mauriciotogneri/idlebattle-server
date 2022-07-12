@@ -8,5 +8,6 @@ public enum InputEvent
     JOIN_PRIVATE,
     INCREASE_MINE,
     INCREASE_ATTACK,
-    LAUNCH_UNITS
+    LAUNCH_UNITS,
+    DISCONNECT
 }

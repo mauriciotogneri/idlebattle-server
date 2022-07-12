@@ -3,6 +3,7 @@
 chrome-extension://pfdhoblngboilpfeibdedpjgfnlcodoo/index.html
 
 ## TODO
+* Remove MatchStatus from event MATCH_READY
 * Localize app
 * Before the match starts, make a few echos to the server to calculate the average latency.
 It can be used to move forward the units when receiving the launch action

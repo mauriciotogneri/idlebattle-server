@@ -5,8 +5,6 @@ import com.mauriciotogneri.idlebattle.types.OutputEvent;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 public class OutputMessage
 {
     public final OutputEvent event;
@@ -17,10 +15,8 @@ public class OutputMessage
     public final Integer direction;
     public final Integer attackLevel;
     public final FinishState finishState;
-    public final PlayerStatus playerStatus;
     public final MatchStatus matchStatus;
     public final MatchConfiguration configuration;
-    public final List<PlayerIdentity> players;
 
     private OutputMessage(OutputEvent event,
                           String playerName,
@@ -30,10 +26,8 @@ public class OutputMessage
                           Integer direction,
                           Integer attackLevel,
                           FinishState finishState,
-                          PlayerStatus playerStatus,
                           MatchStatus matchStatus,
-                          MatchConfiguration configuration,
-                          List<PlayerIdentity> players)
+                          MatchConfiguration configuration)
     {
         this.event = event;
         this.playerName = playerName;
@@ -43,10 +37,8 @@ public class OutputMessage
         this.direction = direction;
         this.attackLevel = attackLevel;
         this.finishState = finishState;
-        this.playerStatus = playerStatus;
         this.matchStatus = matchStatus;
         this.configuration = configuration;
-        this.players = players;
     }
 
     public OutputMessage withPlayerName(String playerName)
@@ -59,10 +51,8 @@ public class OutputMessage
                                  direction,
                                  attackLevel,
                                  finishState,
-                                 playerStatus,
                                  matchStatus,
-                                 configuration,
-                                 players);
+                                 configuration);
     }
 
     public OutputMessage withMatchId(String matchId)
@@ -75,10 +65,8 @@ public class OutputMessage
                                  direction,
                                  attackLevel,
                                  finishState,
-                                 playerStatus,
                                  matchStatus,
-                                 configuration,
-                                 players);
+                                 configuration);
     }
 
     public OutputMessage withLaneId(Integer laneId)
@@ -91,10 +79,8 @@ public class OutputMessage
                                  direction,
                                  attackLevel,
                                  finishState,
-                                 playerStatus,
                                  matchStatus,
-                                 configuration,
-                                 players);
+                                 configuration);
     }
 
     public OutputMessage withAmount(Integer amount)
@@ -107,10 +93,8 @@ public class OutputMessage
                                  direction,
                                  attackLevel,
                                  finishState,
-                                 playerStatus,
                                  matchStatus,
-                                 configuration,
-                                 players);
+                                 configuration);
     }
 
     public OutputMessage withDirection(Integer direction)
@@ -123,10 +107,8 @@ public class OutputMessage
                                  direction,
                                  attackLevel,
                                  finishState,
-                                 playerStatus,
                                  matchStatus,
-                                 configuration,
-                                 players);
+                                 configuration);
     }
 
     public OutputMessage withAttackLevel(Integer attackLevel)
@@ -139,26 +121,8 @@ public class OutputMessage
                                  direction,
                                  attackLevel,
                                  finishState,
-                                 playerStatus,
                                  matchStatus,
-                                 configuration,
-                                 players);
-    }
-
-    public OutputMessage withPlayerStatus(PlayerStatus playerStatus)
-    {
-        return new OutputMessage(event,
-                                 playerName,
-                                 matchId,
-                                 laneId,
-                                 amount,
-                                 direction,
-                                 attackLevel,
-                                 finishState,
-                                 playerStatus,
-                                 matchStatus,
-                                 configuration,
-                                 players);
+                                 configuration);
     }
 
     public OutputMessage withConfiguration(MatchConfiguration configuration)
@@ -171,26 +135,8 @@ public class OutputMessage
                                  direction,
                                  attackLevel,
                                  finishState,
-                                 playerStatus,
                                  matchStatus,
-                                 configuration,
-                                 players);
-    }
-
-    public OutputMessage withPlayers(List<PlayerIdentity> players)
-    {
-        return new OutputMessage(event,
-                                 playerName,
-                                 matchId,
-                                 laneId,
-                                 amount,
-                                 direction,
-                                 attackLevel,
-                                 finishState,
-                                 playerStatus,
-                                 matchStatus,
-                                 configuration,
-                                 players);
+                                 configuration);
     }
 
     public OutputMessage withMatchStatus(MatchStatus matchStatus)
@@ -203,10 +149,8 @@ public class OutputMessage
                                  direction,
                                  attackLevel,
                                  finishState,
-                                 playerStatus,
                                  matchStatus,
-                                 configuration,
-                                 players);
+                                 configuration);
     }
 
     public OutputMessage withFinishState(FinishState finishState)
@@ -219,16 +163,14 @@ public class OutputMessage
                                  direction,
                                  attackLevel,
                                  finishState,
-                                 playerStatus,
                                  matchStatus,
-                                 configuration,
-                                 players);
+                                 configuration);
     }
 
     @NotNull
     public static OutputMessage create(OutputEvent event)
     {
-        return new OutputMessage(event, null, null, null, null, null, null, null, null, null, null, null);
+        return new OutputMessage(event, null, null, null, null, null, null, null, null, null);
     }
 
     @NotNull
@@ -240,21 +182,18 @@ public class OutputMessage
     @NotNull
     public static OutputMessage waitingPrivate(String matchId)
     {
-        return create(OutputEvent.WAITING_PRIVATE).withMatchId(matchId);
+        return create(OutputEvent.WAITING_PRIVATE)
+                .withMatchId(matchId);
     }
 
     @NotNull
     public static OutputMessage matchReady(
             MatchStatus matchStatus,
-            MatchConfiguration configuration,
-            List<PlayerIdentity> players,
-            PlayerStatus playerStatus)
+            MatchConfiguration configuration)
     {
         return create(OutputEvent.MATCH_READY)
                 .withMatchStatus(matchStatus)
-                .withConfiguration(configuration)
-                .withPlayers(players)
-                .withPlayerStatus(playerStatus);
+                .withConfiguration(configuration);
     }
 
     @NotNull
@@ -264,17 +203,10 @@ public class OutputMessage
     }
 
     @NotNull
-    public static OutputMessage playerUpdate(PlayerStatus playerStatus)
-    {
-        return create(OutputEvent.PLAYER_UPDATE).withPlayerStatus(playerStatus);
-    }
-
-    @NotNull
-    public static OutputMessage matchUpdate(MatchStatus matchStatus, PlayerStatus playerStatus)
+    public static OutputMessage matchUpdate(MatchStatus matchStatus)
     {
         return create(OutputEvent.MATCH_UPDATE)
-                .withMatchStatus(matchStatus)
-                .withPlayerStatus(playerStatus);
+                .withMatchStatus(matchStatus);
     }
 
     @NotNull
@@ -290,37 +222,43 @@ public class OutputMessage
     @NotNull
     public static OutputMessage matchFinished(FinishState finishState)
     {
-        return create(OutputEvent.MATCH_FINISHED).withFinishState(finishState);
+        return create(OutputEvent.MATCH_FINISHED)
+                .withFinishState(finishState);
     }
 
     @NotNull
     public static OutputMessage echo(String matchId)
     {
-        return create(OutputEvent.ECHO).withMatchId(matchId);
+        return create(OutputEvent.ECHO)
+                .withMatchId(matchId);
     }
 
     @NotNull
     public static OutputMessage invalidMatchId(String matchId)
     {
-        return create(OutputEvent.INVALID_MATCH_ID).withMatchId(matchId);
+        return create(OutputEvent.INVALID_MATCH_ID)
+                .withMatchId(matchId);
     }
 
     @NotNull
     public static OutputMessage invalidPlayerName(String playerName)
     {
-        return create(OutputEvent.INVALID_PLAYER_NAME).withPlayerName(playerName);
+        return create(OutputEvent.INVALID_PLAYER_NAME)
+                .withPlayerName(playerName);
     }
 
     @NotNull
     public static OutputMessage invalidLaneId(Integer laneId)
     {
-        return create(OutputEvent.INVALID_LANE_ID).withLaneId(laneId);
+        return create(OutputEvent.INVALID_LANE_ID)
+                .withLaneId(laneId);
     }
 
     @NotNull
     public static OutputMessage invalidAmount(Integer amount)
     {
-        return create(OutputEvent.INVALID_AMOUNT).withAmount(amount);
+        return create(OutputEvent.INVALID_AMOUNT)
+                .withAmount(amount);
     }
 
     @NotNull

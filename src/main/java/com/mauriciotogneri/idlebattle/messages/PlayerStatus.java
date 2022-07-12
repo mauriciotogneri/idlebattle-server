@@ -2,13 +2,25 @@ package com.mauriciotogneri.idlebattle.messages;
 
 public class PlayerStatus
 {
-    private final int points;
-    private final double money;
-    private final int mineLevel;
-    private final int attackLevel;
+    private final String name;
+    private final Integer direction;
+    private final Boolean isSelf;
+    private final Integer points;
+    private final Double money;
+    private final Integer mineLevel;
+    private final Integer attackLevel;
 
-    public PlayerStatus(int points, double money, int mineLevel, int attackLevel)
+    public PlayerStatus(String name,
+                        Integer direction,
+                        Boolean isSelf,
+                        Integer points,
+                        Double money,
+                        Integer mineLevel,
+                        Integer attackLevel)
     {
+        this.name = name;
+        this.direction = direction;
+        this.isSelf = isSelf;
         this.points = points;
         this.money = money;
         this.mineLevel = mineLevel;

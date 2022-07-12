@@ -2,9 +2,9 @@ package com.mauriciotogneri.idlebattle.messages;
 
 public class LaneStatus
 {
-    private final boolean enabled;
-    private final boolean rewardEnabled;
-    private final double wall;
+    private final Boolean enabled;
+    private final Boolean rewardEnabled;
+    private final Double wall;
 
     public LaneStatus(boolean enabled, boolean rewardEnabled, double wall)
     {

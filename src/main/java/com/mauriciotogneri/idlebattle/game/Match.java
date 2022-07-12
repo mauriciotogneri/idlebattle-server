@@ -3,7 +3,7 @@ package com.mauriciotogneri.idlebattle.game;
 import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 import com.mauriciotogneri.idlebattle.messages.MatchStatus;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
-import com.mauriciotogneri.idlebattle.messages.PlayerIdentity;
+import com.mauriciotogneri.idlebattle.messages.PlayerStatus;
 import com.mauriciotogneri.idlebattle.server.Server;
 import com.mauriciotogneri.idlebattle.types.FinishState;
 import com.mauriciotogneri.idlebattle.types.MatchState;
@@ -56,10 +56,7 @@ public class Match
     {
         for (Player player : players)
         {
-            player.send(OutputMessage.matchReady(status(),
-                                                 configuration,
-                                                 playerIdentities(players, player),
-                                                 player.status()));
+            player.send(OutputMessage.matchReady(status(player), configuration));
         }
     }
 
@@ -100,7 +97,7 @@ public class Match
         if (player != null)
         {
             player.increaseMine(configuration.mineCostMultiplier);
-            sendPlayerUpdate(player);
+            sendMatchUpdate();
         }
         else
         {
@@ -115,7 +112,7 @@ public class Match
         if (player != null)
         {
             player.increaseAttack(configuration.attackCostMultiplier);
-            sendPlayerUpdate(player);
+            sendMatchUpdate();
         }
         else
         {
@@ -144,19 +141,19 @@ public class Match
                     }
                     else
                     {
-                        sendPlayerUpdate(player);
+                        sendMatchUpdate();
                         Server.send(webSocket, OutputMessage.invalidAmount(amount));
                     }
                 }
                 else
                 {
-                    sendPlayerUpdate(player);
+                    sendMatchUpdate();
                     Server.send(webSocket, OutputMessage.invalidAmount(amount));
                 }
             }
             else
             {
-                sendPlayerUpdate(player);
+                sendMatchUpdate();
                 Server.send(webSocket, OutputMessage.invalidLaneId(laneId));
             }
         }
@@ -202,23 +199,24 @@ public class Match
     }
 
     @NotNull
-    private MatchStatus status()
+    private MatchStatus status(Player player)
     {
         return new MatchStatus(
                 id,
-                (int)(configuration.matchTimeout - totalTime),
+                (int) (configuration.matchTimeout - totalTime),
+                playerStatus(players, player),
                 lanes.stream().map(Lane::status).collect(Collectors.toList())
         );
     }
 
     @NotNull
-    private List<PlayerIdentity> playerIdentities(@NotNull List<Player> players, Player self)
+    private List<PlayerStatus> playerStatus(@NotNull List<Player> players, Player self)
     {
-        List<PlayerIdentity> result = new ArrayList<>();
+        List<PlayerStatus> result = new ArrayList<>();
 
         for (Player player : players)
         {
-            result.add(player.identity(player == self));
+            result.add(player.status(player == self));
         }
 
         return result;
@@ -276,13 +274,8 @@ public class Match
     {
         for (Player player : players)
         {
-            player.send(OutputMessage.matchUpdate(status(), player.status()));
+            player.send(OutputMessage.matchUpdate(status(player)));
         }
-    }
-
-    private void sendPlayerUpdate(@NotNull Player player)
-    {
-        player.send(OutputMessage.playerUpdate(player.status()));
     }
 
     private boolean checkWinnerByPoints()

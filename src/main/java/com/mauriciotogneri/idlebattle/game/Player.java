@@ -2,7 +2,6 @@ package com.mauriciotogneri.idlebattle.game;
 
 import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
-import com.mauriciotogneri.idlebattle.messages.PlayerIdentity;
 import com.mauriciotogneri.idlebattle.messages.PlayerStatus;
 import com.mauriciotogneri.idlebattle.server.Server;
 
@@ -118,18 +117,16 @@ public class Player
         Server.send(webSocket, message);
     }
 
-    public PlayerStatus status()
+    public PlayerStatus status(boolean isSelf)
     {
         return new PlayerStatus(
+                name,
+                direction,
+                isSelf,
                 points,
-                money,
-                mineLevel,
-                attackLevel
+                isSelf ? money : null,
+                isSelf ? mineLevel : null,
+                isSelf ? attackLevel : null
         );
-    }
-
-    public PlayerIdentity identity(boolean isSelf)
-    {
-        return new PlayerIdentity(name, direction, isSelf);
     }
 }

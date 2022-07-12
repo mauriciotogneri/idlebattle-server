@@ -6,17 +6,17 @@ public class MatchStatus
 {
     private final String id;
     private final int remainingTime;
-    private final List<PlayerStatus> playerStatus;
+    private final List<PlayerStatus> player;
     private final List<LaneStatus> lanes;
 
     public MatchStatus(String id,
                        Integer remainingTime,
-                       List<PlayerStatus> playerStatus,
+                       List<PlayerStatus> player,
                        List<LaneStatus> lanes)
     {
         this.id = id;
         this.remainingTime = remainingTime;
-        this.playerStatus = playerStatus;
+        this.player = player;
         this.lanes = lanes;
     }
 }

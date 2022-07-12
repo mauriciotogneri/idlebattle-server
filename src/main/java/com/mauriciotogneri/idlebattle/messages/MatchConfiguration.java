@@ -15,13 +15,19 @@ public class MatchConfiguration
     public final int moneyRate;
     public final int unitCost;
     public final double unitSpeed;
+    public final int initialMoney;
+    public final int lostLaneMoney;
+    public final int laneRewardMoney;
 
     private MatchConfiguration(int lanes,
                                int readyTimeout,
                                int matchTimeout,
                                int moneyRate,
                                int unitCost,
-                               double unitSpeed)
+                               double unitSpeed,
+                               int initialMoney,
+                               int lostLaneMoney,
+                               int laneRewardMoney)
     {
         this.lanes = lanes;
         this.readyTimeout = readyTimeout;
@@ -29,6 +35,9 @@ public class MatchConfiguration
         this.moneyRate = moneyRate;
         this.unitCost = unitCost;
         this.unitSpeed = unitSpeed;
+        this.initialMoney = initialMoney;
+        this.lostLaneMoney = lostLaneMoney;
+        this.laneRewardMoney = laneRewardMoney;
     }
 
     public int winnerLimit()
@@ -52,6 +61,9 @@ public class MatchConfiguration
             int moneyRate = Integer.parseInt(properties.getProperty("MONEY_RATE"));
             int unitCost = Integer.parseInt(properties.getProperty("UNIT_COST"));
             double unitSpeed = Double.parseDouble(properties.getProperty("UNIT_SPEED"));
+            int initialMoney = Integer.parseInt(properties.getProperty("INITIAL_MONEY"));
+            int lostLaneMoney = Integer.parseInt(properties.getProperty("LOST_LANE_MONEY"));
+            int laneRewardMoney = Integer.parseInt(properties.getProperty("LANE_REWARD_MONEY"));
 
             return new MatchConfiguration(
                     lanes,
@@ -59,8 +71,10 @@ public class MatchConfiguration
                     matchTimeout,
                     moneyRate,
                     unitCost,
-                    unitSpeed
-            );
+                    unitSpeed,
+                    initialMoney,
+                    lostLaneMoney,
+                    laneRewardMoney);
         }
         catch (Exception e)
         {

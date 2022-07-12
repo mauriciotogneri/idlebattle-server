@@ -64,13 +64,13 @@ public class Lane
                 {
                     sendUpdate = true;
                     rewardEnabled = false;
-                    player1.addMoney(Constants.LINE_REWARD);
+                    player1.addMoney(configuration.laneRewardMoney);
                 }
                 else if (wall <= 0.25)
                 {
                     sendUpdate = true;
                     rewardEnabled = false;
-                    player2.addMoney(Constants.LINE_REWARD);
+                    player2.addMoney(configuration.laneRewardMoney);
                 }
             }
 
@@ -79,7 +79,7 @@ public class Lane
                 sendUpdate = true;
                 wall = 1;
                 player1.addPoint();
-                player2.addMoney(Constants.LOST_LANE_MONEY);
+                player2.addMoney(configuration.lostLaneMoney);
                 enabled = false;
                 units.clear();
             }
@@ -88,7 +88,7 @@ public class Lane
                 sendUpdate = true;
                 wall = 0;
                 player2.addPoint();
-                player1.addMoney(Constants.LOST_LANE_MONEY);
+                player1.addMoney(configuration.lostLaneMoney);
                 enabled = false;
                 units.clear();
             }

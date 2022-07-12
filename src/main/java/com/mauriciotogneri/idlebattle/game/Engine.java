@@ -32,11 +32,12 @@ public class Engine
         {
             WaitingPublicPlayer waitingPlayer = waitingPublic.remove(0);
 
+            MatchConfiguration configuration = MatchConfiguration.fromFile();
             String matchId = Match.newId();
-            Player player1 = new Player(waitingPlayer.webSocket, waitingPlayer.name, Constants.DIRECTION_UP);
-            Player player2 = new Player(webSocket, playerName, Constants.DIRECTION_DOWN);
+            Player player1 = new Player(waitingPlayer.webSocket, waitingPlayer.name, Constants.DIRECTION_UP, configuration.initialMoney);
+            Player player2 = new Player(webSocket, playerName, Constants.DIRECTION_DOWN, configuration.initialMoney);
 
-            startMatch(matchId, player1, player2);
+            startMatch(matchId, configuration, player1, player2);
         }
     }
 
@@ -61,10 +62,11 @@ public class Engine
         {
             waitingPrivate.remove(waitingPlayer);
 
-            Player player1 = new Player(waitingPlayer.webSocket, waitingPlayer.name, Constants.DIRECTION_UP);
-            Player player2 = new Player(webSocket, playerName, Constants.DIRECTION_DOWN);
+            MatchConfiguration configuration = MatchConfiguration.fromFile();
+            Player player1 = new Player(waitingPlayer.webSocket, waitingPlayer.name, Constants.DIRECTION_UP, configuration.initialMoney);
+            Player player2 = new Player(webSocket, playerName, Constants.DIRECTION_DOWN, configuration.initialMoney);
 
-            startMatch(matchId, player1, player2);
+            startMatch(matchId, configuration, player1, player2);
         }
         else
         {
@@ -185,13 +187,13 @@ public class Engine
         }
     }
 
-    private void startMatch(String matchId, @NotNull Player player1, @NotNull Player player2)
+    private void startMatch(String matchId, MatchConfiguration configuration, @NotNull Player player1, @NotNull Player player2)
     {
         List<Player> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
 
-        Match match = new Match(matchId, players, MatchConfiguration.fromFile());
+        Match match = new Match(matchId, players, configuration);
         match.start();
 
         matches.put(matchId, match);

@@ -128,13 +128,13 @@ public class OutputMessage
     @NotNull
     public static OutputMessage waitingPublic()
     {
-        return create(OutputEvent.WAITING);
+        return create(OutputEvent.WAITING_PUBLIC);
     }
 
     @NotNull
     public static OutputMessage waitingPrivate(String matchId)
     {
-        return create(OutputEvent.WAITING).withMatchId(matchId);
+        return create(OutputEvent.WAITING_PRIVATE).withMatchId(matchId);
     }
 
     @NotNull

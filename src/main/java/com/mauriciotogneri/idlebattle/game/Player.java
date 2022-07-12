@@ -34,6 +34,11 @@ public class Player
         return direction;
     }
 
+    public int attackLevel()
+    {
+        return attackLevel;
+    }
+
     public String name()
     {
         return name;

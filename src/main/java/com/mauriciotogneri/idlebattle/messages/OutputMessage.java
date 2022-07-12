@@ -15,6 +15,7 @@ public class OutputMessage
     public final Integer laneId;
     public final Integer amount;
     public final Integer direction;
+    public final Integer attackLevel;
     public final FinishState finishState;
     public final PlayerStatus playerStatus;
     public final MatchStatus matchStatus;
@@ -27,6 +28,7 @@ public class OutputMessage
                           Integer laneId,
                           Integer amount,
                           Integer direction,
+                          Integer attackLevel,
                           FinishState finishState,
                           PlayerStatus playerStatus,
                           MatchStatus matchStatus,
@@ -39,6 +41,7 @@ public class OutputMessage
         this.laneId = laneId;
         this.amount = amount;
         this.direction = direction;
+        this.attackLevel = attackLevel;
         this.finishState = finishState;
         this.playerStatus = playerStatus;
         this.matchStatus = matchStatus;
@@ -54,6 +57,7 @@ public class OutputMessage
                                  laneId,
                                  amount,
                                  direction,
+                                 attackLevel,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -69,6 +73,7 @@ public class OutputMessage
                                  laneId,
                                  amount,
                                  direction,
+                                 attackLevel,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -84,6 +89,7 @@ public class OutputMessage
                                  laneId,
                                  amount,
                                  direction,
+                                 attackLevel,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -99,6 +105,7 @@ public class OutputMessage
                                  laneId,
                                  amount,
                                  direction,
+                                 attackLevel,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -114,6 +121,23 @@ public class OutputMessage
                                  laneId,
                                  amount,
                                  direction,
+                                 attackLevel,
+                                 finishState,
+                                 playerStatus,
+                                 matchStatus,
+                                 configuration,
+                                 players);
+    }
+
+    public OutputMessage withAttackLevel(Integer attackLevel)
+    {
+        return new OutputMessage(event,
+                                 playerName,
+                                 matchId,
+                                 laneId,
+                                 amount,
+                                 direction,
+                                 attackLevel,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -129,6 +153,7 @@ public class OutputMessage
                                  laneId,
                                  amount,
                                  direction,
+                                 attackLevel,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -144,6 +169,7 @@ public class OutputMessage
                                  laneId,
                                  amount,
                                  direction,
+                                 attackLevel,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -159,6 +185,7 @@ public class OutputMessage
                                  laneId,
                                  amount,
                                  direction,
+                                 attackLevel,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -174,6 +201,7 @@ public class OutputMessage
                                  laneId,
                                  amount,
                                  direction,
+                                 attackLevel,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -189,6 +217,7 @@ public class OutputMessage
                                  laneId,
                                  amount,
                                  direction,
+                                 attackLevel,
                                  finishState,
                                  playerStatus,
                                  matchStatus,
@@ -199,7 +228,7 @@ public class OutputMessage
     @NotNull
     public static OutputMessage create(OutputEvent event)
     {
-        return new OutputMessage(event, null, null, null, null, null, null, null, null, null, null);
+        return new OutputMessage(event, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     @NotNull
@@ -249,12 +278,13 @@ public class OutputMessage
     }
 
     @NotNull
-    public static OutputMessage unitsLaunched(int laneId, int amount, int direction)
+    public static OutputMessage unitsLaunched(int laneId, int amount, int direction, int attackLevel)
     {
         return create(OutputEvent.UNITS_LAUNCHED)
                 .withLaneId(laneId)
                 .withAmount(amount)
-                .withDirection(direction);
+                .withDirection(direction)
+                .withAttackLevel(attackLevel);
     }
 
     @NotNull

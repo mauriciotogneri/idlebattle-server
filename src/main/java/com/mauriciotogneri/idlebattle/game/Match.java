@@ -140,7 +140,7 @@ public class Match
                     if (units != null)
                     {
                         lane.launchUnits(units);
-                        broadcast(OutputMessage.unitsLaunched(laneId, amount, player.direction()));
+                        broadcast(OutputMessage.unitsLaunched(laneId, amount, player.direction(), player.attackLevel()));
                     }
                     else
                     {

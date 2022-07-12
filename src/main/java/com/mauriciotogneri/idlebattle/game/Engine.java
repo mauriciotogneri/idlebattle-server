@@ -114,6 +114,20 @@ public class Engine
         }
     }
 
+    public void echo(WebSocket webSocket, String matchId)
+    {
+        Match match = matches.get(matchId);
+
+        if (match != null)
+        {
+            Server.send(webSocket, OutputMessage.echo(matchId));
+        }
+        else
+        {
+            Server.send(webSocket, OutputMessage.invalidMatchId(matchId));
+        }
+    }
+
     @Nullable
     private WaitingPrivatePlayer getWaitingPrivate(String matchId)
     {

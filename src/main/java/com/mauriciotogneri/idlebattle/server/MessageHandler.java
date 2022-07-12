@@ -43,6 +43,10 @@ public class MessageHandler
             case LAUNCH_UNITS:
                 launchUnits(webSocket, message);
                 break;
+
+            case ECHO:
+                echo(webSocket, message);
+                break;
         }
     }
 
@@ -142,6 +146,20 @@ public class MessageHandler
         else
         {
             engine.launchUnits(webSocket, matchId, laneId, amount);
+        }
+    }
+
+    private void echo(WebSocket webSocket, @NotNull InputMessage message)
+    {
+        String matchId = message.matchId;
+
+        if (!valueNotEmpty(matchId))
+        {
+            Server.send(webSocket, OutputMessage.invalidMatchId(matchId));
+        }
+        else
+        {
+            engine.echo(webSocket, matchId);
         }
     }
 

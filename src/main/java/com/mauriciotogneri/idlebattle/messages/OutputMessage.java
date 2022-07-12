@@ -172,6 +172,12 @@ public class OutputMessage
     }
 
     @NotNull
+    public static OutputMessage echo(String matchId)
+    {
+        return create(OutputEvent.ECHO).withMatchId(matchId);
+    }
+
+    @NotNull
     public static OutputMessage invalidMatchId(String matchId)
     {
         return create(OutputEvent.INVALID_MATCH_ID).withMatchId(matchId);

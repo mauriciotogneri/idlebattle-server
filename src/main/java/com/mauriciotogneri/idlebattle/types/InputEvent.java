@@ -2,6 +2,7 @@ package com.mauriciotogneri.idlebattle.types;
 
 public enum InputEvent
 {
+    ECHO,
     JOIN_PUBLIC,
     CREATE_PRIVATE,
     JOIN_PRIVATE,

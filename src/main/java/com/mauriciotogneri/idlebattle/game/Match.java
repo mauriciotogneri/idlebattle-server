@@ -55,7 +55,10 @@ public class Match
     {
         for (Player player : players)
         {
-            player.send(OutputMessage.matchReady(status(player), player.status()));
+            player.send(OutputMessage.matchReady(status(),
+                                                 configuration,
+                                                 playerIdentities(players, player),
+                                                 player.status()));
         }
     }
 
@@ -187,9 +190,9 @@ public class Match
     }
 
     @NotNull
-    private MatchStatus status(Player self)
+    private MatchStatus status()
     {
-        return new MatchStatus(id, totalTime, playerIdentities(players, self), lanes);
+        return new MatchStatus(id, totalTime, lanes);
     }
 
     @NotNull
@@ -257,7 +260,7 @@ public class Match
     {
         for (Player player : players)
         {
-            player.send(OutputMessage.matchUpdate(status(player), player.status()));
+            player.send(OutputMessage.matchUpdate(status(), player.status()));
         }
     }
 

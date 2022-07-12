@@ -5,6 +5,8 @@ import com.mauriciotogneri.idlebattle.types.OutputEvent;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class OutputMessage
 {
     public final OutputEvent event;
@@ -15,6 +17,8 @@ public class OutputMessage
     public final FinishState finishState;
     public final PlayerStatus playerStatus;
     public final MatchStatus matchStatus;
+    public final MatchConfiguration configuration;
+    public final List<PlayerIdentity> players;
 
     private OutputMessage(OutputEvent event,
                           String playerName,
@@ -23,7 +27,9 @@ public class OutputMessage
                           Integer amount,
                           FinishState finishState,
                           PlayerStatus playerStatus,
-                          MatchStatus matchStatus)
+                          MatchStatus matchStatus,
+                          MatchConfiguration configuration,
+                          List<PlayerIdentity> players)
     {
         this.event = event;
         this.playerName = playerName;
@@ -33,6 +39,8 @@ public class OutputMessage
         this.finishState = finishState;
         this.playerStatus = playerStatus;
         this.matchStatus = matchStatus;
+        this.configuration = configuration;
+        this.players = players;
     }
 
     public OutputMessage withPlayerName(String playerName)
@@ -44,7 +52,9 @@ public class OutputMessage
                                  amount,
                                  finishState,
                                  playerStatus,
-                                 matchStatus);
+                                 matchStatus,
+                                 configuration,
+                                 players);
     }
 
     public OutputMessage withMatchId(String matchId)
@@ -56,7 +66,9 @@ public class OutputMessage
                                  amount,
                                  finishState,
                                  playerStatus,
-                                 matchStatus);
+                                 matchStatus,
+                                 configuration,
+                                 players);
     }
 
     public OutputMessage withLaneId(Integer laneId)
@@ -68,7 +80,9 @@ public class OutputMessage
                                  amount,
                                  finishState,
                                  playerStatus,
-                                 matchStatus);
+                                 matchStatus,
+                                 configuration,
+                                 players);
     }
 
     public OutputMessage withAmount(Integer amount)
@@ -80,7 +94,9 @@ public class OutputMessage
                                  amount,
                                  finishState,
                                  playerStatus,
-                                 matchStatus);
+                                 matchStatus,
+                                 configuration,
+                                 players);
     }
 
     public OutputMessage withPlayerStatus(PlayerStatus playerStatus)
@@ -92,7 +108,37 @@ public class OutputMessage
                                  amount,
                                  finishState,
                                  playerStatus,
-                                 matchStatus);
+                                 matchStatus,
+                                 configuration,
+                                 players);
+    }
+
+    public OutputMessage withConfiguration(MatchConfiguration configuration)
+    {
+        return new OutputMessage(event,
+                                 playerName,
+                                 matchId,
+                                 laneId,
+                                 amount,
+                                 finishState,
+                                 playerStatus,
+                                 matchStatus,
+                                 configuration,
+                                 players);
+    }
+
+    public OutputMessage withPlayers(List<PlayerIdentity> players)
+    {
+        return new OutputMessage(event,
+                                 playerName,
+                                 matchId,
+                                 laneId,
+                                 amount,
+                                 finishState,
+                                 playerStatus,
+                                 matchStatus,
+                                 configuration,
+                                 players);
     }
 
     public OutputMessage withMatchStatus(MatchStatus matchStatus)
@@ -104,7 +150,9 @@ public class OutputMessage
                                  amount,
                                  finishState,
                                  playerStatus,
-                                 matchStatus);
+                                 matchStatus,
+                                 configuration,
+                                 players);
     }
 
     public OutputMessage withFinishState(FinishState finishState)
@@ -116,13 +164,15 @@ public class OutputMessage
                                  amount,
                                  finishState,
                                  playerStatus,
-                                 matchStatus);
+                                 matchStatus,
+                                 configuration,
+                                 players);
     }
 
     @NotNull
     public static OutputMessage create(OutputEvent event)
     {
-        return new OutputMessage(event, null, null, null, null, null, null, null);
+        return new OutputMessage(event, null, null, null, null, null, null, null, null, null);
     }
 
     @NotNull
@@ -138,10 +188,16 @@ public class OutputMessage
     }
 
     @NotNull
-    public static OutputMessage matchReady(MatchStatus matchStatus, PlayerStatus playerStatus)
+    public static OutputMessage matchReady(
+            MatchStatus matchStatus,
+            MatchConfiguration configuration,
+            List<PlayerIdentity> players,
+            PlayerStatus playerStatus)
     {
         return create(OutputEvent.MATCH_READY)
                 .withMatchStatus(matchStatus)
+                .withConfiguration(configuration)
+                .withPlayers(players)
                 .withPlayerStatus(playerStatus);
     }
 

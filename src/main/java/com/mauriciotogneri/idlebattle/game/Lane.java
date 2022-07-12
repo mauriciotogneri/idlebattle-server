@@ -76,18 +76,18 @@ public class Lane
             if (wall >= 1)
             {
                 sendUpdate = true;
-                wall = 1;
                 player1.addPoint();
                 player2.addMoney(configuration.lostLaneMoney);
+                wall = 1;
                 enabled = false;
                 units.clear();
             }
             else if (wall <= 0)
             {
                 sendUpdate = true;
-                wall = 0;
                 player2.addPoint();
                 player1.addMoney(configuration.lostLaneMoney);
+                wall = 0;
                 enabled = false;
                 units.clear();
             }

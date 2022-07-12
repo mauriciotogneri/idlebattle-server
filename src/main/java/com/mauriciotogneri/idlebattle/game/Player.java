@@ -125,6 +125,6 @@ public class Player
 
     public PlayerIdentity identity(boolean isSelf)
     {
-        return new PlayerIdentity(name, isSelf);
+        return new PlayerIdentity(name, direction, isSelf);
     }
 }

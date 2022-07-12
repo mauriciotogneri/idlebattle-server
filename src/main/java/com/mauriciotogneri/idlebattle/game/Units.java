@@ -3,6 +3,8 @@ package com.mauriciotogneri.idlebattle.game;
 import com.mauriciotogneri.idlebattle.app.Constants;
 import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Units
 {
     private final MatchConfiguration configuration;
@@ -10,7 +12,7 @@ public class Units
     private final double totalDamage;
     private double progress;
 
-    public Units(MatchConfiguration configuration, int direction, int amount, double damagePerUnit)
+    public Units(@NotNull MatchConfiguration configuration, int direction, int amount, double damagePerUnit)
     {
         this.configuration = configuration;
         this.direction = direction;

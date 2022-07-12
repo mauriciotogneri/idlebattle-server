@@ -8,7 +8,6 @@ public enum OutputEvent
     MATCH_READY,
     MATCH_STARTED,
     UNITS_LAUNCHED,
-    PLAYER_UPDATE,
     MATCH_UPDATE,
     MATCH_FINISHED,
     INVALID_MATCH_ID,

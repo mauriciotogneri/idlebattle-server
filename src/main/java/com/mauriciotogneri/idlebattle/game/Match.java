@@ -98,7 +98,7 @@ public class Match
 
         if (player != null)
         {
-            player.increaseMine();
+            player.increaseMine(configuration.mineCostMultiplier);
             player.send(OutputMessage.playerUpdate(player.status()));
         }
         else
@@ -113,7 +113,7 @@ public class Match
 
         if (player != null)
         {
-            player.increaseAttack();
+            player.increaseAttack(configuration.attackCostMultiplier);
             player.send(OutputMessage.playerUpdate(player.status()));
         }
         else

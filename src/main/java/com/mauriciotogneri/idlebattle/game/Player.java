@@ -1,6 +1,5 @@
 package com.mauriciotogneri.idlebattle.game;
 
-import com.mauriciotogneri.idlebattle.app.Constants;
 import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.messages.PlayerIdentity;
@@ -50,9 +49,9 @@ public class Player
         return points >= limit;
     }
 
-    public void increaseMine()
+    public void increaseMine(int multiplier)
     {
-        int cost = mineLevel * Constants.MINE_COST_MULTIPLIER;
+        int cost = mineLevel * multiplier;
 
         if (money >= cost)
         {
@@ -61,9 +60,9 @@ public class Player
         }
     }
 
-    public void increaseAttack()
+    public void increaseAttack(int multiplier)
     {
-        int cost = attackLevel * Constants.ATTACK_COST_MULTIPLIER;
+        int cost = attackLevel * multiplier;
 
         if (money >= cost)
         {
@@ -85,7 +84,7 @@ public class Player
                     configuration,
                     direction,
                     amount,
-                    Constants.UNIT_BASE_DAMAGE * attackLevel
+                    configuration.unitBaseDamage * attackLevel
             );
         }
         else

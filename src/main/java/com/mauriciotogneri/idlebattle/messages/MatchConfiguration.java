@@ -18,6 +18,10 @@ public class MatchConfiguration
     public final int initialMoney;
     public final int lostLaneMoney;
     public final int laneRewardMoney;
+    public final int mineCostMultiplier;
+    public final int attackCostMultiplier;
+    public final double blockMultiplier;
+    public final double unitBaseDamage;
 
     private MatchConfiguration(int lanes,
                                int readyTimeout,
@@ -27,7 +31,11 @@ public class MatchConfiguration
                                double unitSpeed,
                                int initialMoney,
                                int lostLaneMoney,
-                               int laneRewardMoney)
+                               int laneRewardMoney,
+                               int mineCostMultiplier,
+                               int attackCostMultiplier,
+                               double blockMultiplier,
+                               double unitBaseDamage)
     {
         this.lanes = lanes;
         this.readyTimeout = readyTimeout;
@@ -38,6 +46,10 @@ public class MatchConfiguration
         this.initialMoney = initialMoney;
         this.lostLaneMoney = lostLaneMoney;
         this.laneRewardMoney = laneRewardMoney;
+        this.mineCostMultiplier = mineCostMultiplier;
+        this.attackCostMultiplier = attackCostMultiplier;
+        this.blockMultiplier = blockMultiplier;
+        this.unitBaseDamage = unitBaseDamage;
     }
 
     public int winnerLimit()
@@ -64,6 +76,10 @@ public class MatchConfiguration
             int initialMoney = Integer.parseInt(properties.getProperty("INITIAL_MONEY"));
             int lostLaneMoney = Integer.parseInt(properties.getProperty("LOST_LANE_MONEY"));
             int laneRewardMoney = Integer.parseInt(properties.getProperty("LANE_REWARD_MONEY"));
+            int mineCostMultiplier = Integer.parseInt(properties.getProperty("MINE_COST_MULTIPLIER"));
+            int attackCostMultiplier = Integer.parseInt(properties.getProperty("ATTACK_COST_MULTIPLIER"));
+            double blockMultiplier = Double.parseDouble(properties.getProperty("BLOCK_MULTIPLIER"));
+            double unitBaseDamage = Double.parseDouble(properties.getProperty("UNIT_BASE_DAMAGE"));
 
             return new MatchConfiguration(
                     lanes,
@@ -74,7 +90,11 @@ public class MatchConfiguration
                     unitSpeed,
                     initialMoney,
                     lostLaneMoney,
-                    laneRewardMoney);
+                    laneRewardMoney,
+                    mineCostMultiplier,
+                    attackCostMultiplier,
+                    blockMultiplier,
+                    unitBaseDamage);
         }
         catch (Exception e)
         {

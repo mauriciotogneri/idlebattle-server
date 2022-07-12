@@ -14,7 +14,7 @@ public class Units
     {
         this.configuration = configuration;
         this.direction = direction;
-        this.totalDamage = amount * ((amount / Constants.BLOCK_MULTIPLIER) + 1) * damagePerUnit;
+        this.totalDamage = amount * ((amount / configuration.blockMultiplier) + 1) * damagePerUnit;
 
         if (direction == Constants.DIRECTION_UP)
         {

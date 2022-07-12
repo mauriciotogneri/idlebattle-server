@@ -6,7 +6,7 @@ public class PlayerStatus
     private final Integer direction;
     private final Boolean isSelf;
     private final Integer points;
-    private final Double money;
+    private final Integer money;
     private final Integer mineLevel;
     private final Integer attackLevel;
 
@@ -14,7 +14,7 @@ public class PlayerStatus
                         Integer direction,
                         Boolean isSelf,
                         Integer points,
-                        Double money,
+                        Integer money,
                         Integer mineLevel,
                         Integer attackLevel)
     {

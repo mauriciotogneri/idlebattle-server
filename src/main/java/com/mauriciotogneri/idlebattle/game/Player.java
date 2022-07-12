@@ -124,7 +124,7 @@ public class Player
                 direction,
                 isSelf,
                 points,
-                isSelf ? money : null,
+                isSelf ? (int)money : null,
                 isSelf ? mineLevel : null,
                 isSelf ? attackLevel : null
         );

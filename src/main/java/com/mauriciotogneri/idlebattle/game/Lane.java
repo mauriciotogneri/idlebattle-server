@@ -99,13 +99,21 @@ public class Lane
 
                     if (Math.abs(force) > Math.abs(distance))
                     {
+                        System.out.printf("1a. DISTANCE: %s    FORCE: %s     WALL: %s%n", distance, force, wall);
+
                         wall += distance;
                         force -= distance;
+
+                        System.out.printf("1b. DISTANCE: %s    FORCE: %s     WALL: %s%n", distance, force, wall);
                     }
                     else
                     {
+                        System.out.printf("2a. DISTANCE: %s    FORCE: %s     WALL: %s%n", distance, force, wall);
+
                         wall += force;
                         force = 0;
+
+                        System.out.printf("2b. DISTANCE: %s    FORCE: %s     WALL: %s%n", distance, force, wall);
                     }
                 }
 

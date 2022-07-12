@@ -28,16 +28,6 @@ public class Units
         }
     }
 
-    public double totalDamage()
-    {
-        return totalDamage;
-    }
-
-    public int direction()
-    {
-        return direction;
-    }
-
     public double force()
     {
         return totalDamage * direction;

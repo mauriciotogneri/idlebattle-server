@@ -119,6 +119,6 @@ public class Lane
 
     public LaneStatus status()
     {
-        return new LaneStatus(enabled, rewardEnabled);
+        return new LaneStatus(enabled, rewardEnabled, wall);
     }
 }

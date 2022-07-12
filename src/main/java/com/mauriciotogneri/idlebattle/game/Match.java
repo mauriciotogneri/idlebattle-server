@@ -318,6 +318,12 @@ public class Match
                 player1.send(OutputMessage.matchFinished(FinishState.LOST));
                 state = MatchState.FINISHED;
             }
+            else
+            {
+                player1.send(OutputMessage.matchFinished(FinishState.TIE));
+                player2.send(OutputMessage.matchFinished(FinishState.TIE));
+                state = MatchState.FINISHED;
+            }
         }
     }
 

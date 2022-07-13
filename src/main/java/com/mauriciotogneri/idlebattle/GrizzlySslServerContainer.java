@@ -118,7 +118,7 @@ public class GrizzlySslServerContainer extends ServerContainerFactory
                 }
 
                 this.server.getListener("grizzly").getKeepAlive().setIdleTimeoutInSeconds(-1);
-                //this.server.getListener("grizzly").registerAddOn(new WebSocketAddOn(this, this.contextPath));
+                this.server.getListener("grizzly").registerAddOn(new WebSocketAddOn(this, this.contextPath));
                 WebSocketEngine webSocketEngine = this.getWebSocketEngine();
                 Object staticContentPath = ((Map) localProperties).get("org.glassfish.tyrus.server.staticContentRoot");
                 HttpHandler staticHandler = null;

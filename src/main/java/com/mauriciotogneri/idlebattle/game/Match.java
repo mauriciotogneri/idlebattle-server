@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -21,7 +22,7 @@ public class Match
 {
     private final String id;
     private final List<Player> players;
-    private final List<Lane> lanes;
+    private final Lane[] lanes;
     private final MatchConfiguration configuration;
     private MatchState state = MatchState.READY;
     private double readyTime = 0;
@@ -32,11 +33,11 @@ public class Match
         this.id = id;
         this.players = players;
 
-        this.lanes = new ArrayList<>();
+        this.lanes = new Lane[configuration.lanes];
 
         for (int i = 0; i < configuration.lanes; i++)
         {
-            this.lanes.add(new Lane(configuration));
+            this.lanes[i] = new Lane(configuration);
         }
 
         this.configuration = configuration;
@@ -166,9 +167,9 @@ public class Match
     @Nullable
     private Lane getLane(int id)
     {
-        if ((id >= 0) && (id < lanes.size()))
+        if ((id >= 0) && (id < lanes.length))
         {
-            return lanes.get(id);
+            return lanes[id];
         }
         else
         {
@@ -205,7 +206,7 @@ public class Match
                 id,
                 (int) (configuration.matchTimeout - totalTime),
                 playerStatus(players, player),
-                lanes.stream().map(Lane::status).collect(Collectors.toList())
+                Arrays.stream(lanes).map(Lane::status).collect(Collectors.toList())
         );
     }
 

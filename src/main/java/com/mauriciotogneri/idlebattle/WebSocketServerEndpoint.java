@@ -23,6 +23,8 @@ public class WebSocketServerEndpoint
     @OnMessage
     public String onMessage(@NotNull String message, Session session)
     {
+        System.out.println("<<< " + message);
+
         if (message.equalsIgnoreCase("terminate"))
         {
             try

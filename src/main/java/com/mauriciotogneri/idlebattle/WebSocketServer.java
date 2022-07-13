@@ -1,6 +1,5 @@
 package com.mauriciotogneri.idlebattle;
 
-import org.glassfish.grizzly.http.server.NetworkListener;
 import org.glassfish.tyrus.server.Server;
 
 import java.util.HashMap;
@@ -12,7 +11,7 @@ public class WebSocketServer
     {
         try
         {
-            NetworkListener listener = new NetworkListener("grizzly", "0.0.0.0", 8888);
+            //NetworkListener listener = new NetworkListener("grizzly", "0.0.0.0", 8888);
             //listener.setSecure(true);
             //listener.setSSLEngineConfig(new SSLEngineConfigurator(getSslContextConfigurator()).setClientMode(false).setNeedClientAuth(false));
 

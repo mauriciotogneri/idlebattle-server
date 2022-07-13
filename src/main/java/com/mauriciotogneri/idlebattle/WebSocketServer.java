@@ -1,14 +1,7 @@
 package com.mauriciotogneri.idlebattle;
 
-import com.mauriciotogneri.idlebattle.ssl.SslConfig;
-
-import org.glassfish.grizzly.http.server.NetworkListener;
-import org.glassfish.grizzly.ssl.SSLEngineConfigurator;
-import org.glassfish.tyrus.client.ClientProperties;
 import org.glassfish.tyrus.server.Server;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class WebSocketServer
@@ -19,16 +12,16 @@ public class WebSocketServer
 
         try
         {
-            SSLEngineConfigurator sslEngineConfigurator = new SSLEngineConfigurator(SslConfig.customContext()).setClientMode(false).setNeedClientAuth(false);
+            /*SSLEngineConfigurator sslEngineConfigurator = new SSLEngineConfigurator(SslConfig.customContext()).setClientMode(false).setNeedClientAuth(false);
 
             NetworkListener listener = new NetworkListener("grizzly", "localhost", 8888);
             listener.setSecure(true);
             listener.setSSLEngineConfig(sslEngineConfigurator);
 
             Map<String, Object> properties = new HashMap<>();
-            properties.put(ClientProperties.SSL_ENGINE_CONFIGURATOR, sslEngineConfigurator);
+            properties.put(ClientProperties.SSL_ENGINE_CONFIGURATOR, sslEngineConfigurator);*/
 
-            server = new Server("localhost", 8888, "", properties, WebSocketServerEndpoint.class);
+            server = new Server("localhost", 8888, "", null, WebSocketServerEndpoint.class);
             server.start();
 
             Scanner scanner = new Scanner(System.in);

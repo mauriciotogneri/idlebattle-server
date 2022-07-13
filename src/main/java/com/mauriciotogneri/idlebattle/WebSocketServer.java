@@ -12,15 +12,6 @@ public class WebSocketServer
 
         try
         {
-            /*SSLEngineConfigurator sslEngineConfigurator = new SSLEngineConfigurator(SslConfig.customContext()).setClientMode(false).setNeedClientAuth(false);
-
-            NetworkListener listener = new NetworkListener("grizzly", "localhost", 8888);
-            listener.setSecure(true);
-            listener.setSSLEngineConfig(sslEngineConfigurator);
-
-            Map<String, Object> properties = new HashMap<>();
-            properties.put(ClientProperties.SSL_ENGINE_CONFIGURATOR, sslEngineConfigurator);*/
-
             server = new Server("localhost", 8888, "", null, WebSocketServerEndpoint.class);
             server.start();
 

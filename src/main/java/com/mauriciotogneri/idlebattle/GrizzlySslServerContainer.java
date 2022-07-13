@@ -1,5 +1,7 @@
 package com.mauriciotogneri.idlebattle;
 
+import com.mauriciotogneri.idlebattle.ssl.SslConfig;
+
 import org.glassfish.grizzly.http.Method;
 import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -10,6 +12,7 @@ import org.glassfish.grizzly.http.server.ServerConfiguration;
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.grizzly.http.util.ContentType;
 import org.glassfish.grizzly.nio.transport.TCPNIOTransportBuilder;
+import org.glassfish.grizzly.ssl.SSLEngineConfigurator;
 import org.glassfish.grizzly.strategies.WorkerThreadIOStrategy;
 import org.glassfish.grizzly.threadpool.ThreadPoolConfig;
 import org.glassfish.tyrus.core.DebugContext;
@@ -92,7 +95,26 @@ public class GrizzlySslServerContainer extends ServerContainerFactory
                 this.contextPath = rootPath;
                 this.server = new HttpServer();
                 ServerConfiguration config = this.server.getServerConfiguration();
-                this.listener = new NetworkListener("grizzly", "0.0.0.0", port);
+
+                SSLEngineConfigurator sslEngineConfigurator = null;
+
+                try
+                {
+                    sslEngineConfigurator = new SSLEngineConfigurator(SslConfig.customContext()).setClientMode(false).setNeedClientAuth(false);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+                NetworkListener networkListener = new NetworkListener("grizzly", "0.0.0.0", port);
+                networkListener.setSecure(true);
+                networkListener.setSSLEngineConfig(sslEngineConfigurator);
+
+                //Map<String, Object> properties = new HashMap<>();
+                //properties.put(ClientProperties.SSL_ENGINE_CONFIGURATOR, sslEngineConfigurator);
+
+                this.listener = networkListener;
                 this.server.addListener(this.listener);
                 ThreadPoolConfig workerThreadPoolConfig = (ThreadPoolConfig) Utils.getProperty((Map) localProperties, "org.glassfish.tyrus.container.grizzly.server.workerThreadPoolConfig", ThreadPoolConfig.class);
                 ThreadPoolConfig selectorThreadPoolConfig = (ThreadPoolConfig) Utils.getProperty((Map) localProperties, "org.glassfish.tyrus.container.grizzly.server.selectorThreadPoolConfig", ThreadPoolConfig.class);

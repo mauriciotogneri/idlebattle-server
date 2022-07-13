@@ -4,6 +4,7 @@ chrome-extension://pfdhoblngboilpfeibdedpjgfnlcodoo/index.html
 
 ## TODO
 * Track with analytics the time length of battles
+* Implement profile auth and leaderboard
 * Remove MatchStatus from event MATCH_READY
 * Localize app
 * Before the match starts, make a few echos to the server to calculate the average latency.

@@ -3,19 +3,27 @@ package com.mauriciotogneri.idlebattle;
 import org.glassfish.tyrus.server.Server;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class WebSocketServer
 {
     public static void main(String[] args)
     {
+        Server server = null;
+
         try
         {
-            //NetworkListener listener = new NetworkListener("grizzly", "0.0.0.0", 8888);
-            //listener.setSecure(true);
-            //listener.setSSLEngineConfig(new SSLEngineConfigurator(getSslContextConfigurator()).setClientMode(false).setNeedClientAuth(false));
+            /*SSLEngineConfigurator sslEngineConfigurator = new SSLEngineConfigurator(SslConfig.customContext()).setClientMode(false).setNeedClientAuth(false);
 
-            Server server = new Server("localhost", 8888, "", new HashMap<>(), WebSocketServerEndpoint.class);
+            NetworkListener listener = new NetworkListener("grizzly", "localhost", 8888);
+            listener.setSecure(true);
+            listener.setSSLEngineConfig(sslEngineConfigurator);*/
+
+            Map<String, Object> properties = new HashMap<>();
+            //properties.put(ClientProperties.SSL_ENGINE_CONFIGURATOR, sslEngineConfigurator);
+
+            server = new Server("localhost", 8888, "", properties, WebSocketServerEndpoint.class);
             server.start();
 
             Scanner scanner = new Scanner(System.in);
@@ -35,6 +43,10 @@ public class WebSocketServer
         catch (Exception e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            server.stop();
         }
     }
 }

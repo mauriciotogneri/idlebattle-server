@@ -13,9 +13,9 @@ public class Logger
         System.out.println(message);
     }
 
-    public static void log(@NotNull WebSocket webSocket, String message)
+    public static void log(WebSocket webSocket, String message)
     {
-        log(String.format("%s %s", webSocket.hashCode(), message));
+        log(String.format("%s %s", (webSocket != null) ? webSocket.hashCode() : 0, message));
     }
 
     public static void onConnected(@NotNull WebSocket webSocket)
@@ -43,7 +43,7 @@ public class Logger
         log(webSocket, "[CLOSED]");
     }
 
-    public static void onError(@NotNull WebSocket webSocket, @NotNull Exception e)
+    public static void onError(WebSocket webSocket, @NotNull Exception e)
     {
         StringWriter stringWriter = new StringWriter();
         e.printStackTrace(new PrintWriter(stringWriter));

@@ -58,7 +58,6 @@ public class Server extends WebSocketServer
     public void onStart()
     {
         Logger.log("Server started!");
-        setConnectionLostTimeout(0);
         setConnectionLostTimeout(100);
     }
 

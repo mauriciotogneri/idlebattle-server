@@ -61,6 +61,6 @@ public class Main
                 break;
         }
 
-        Logger.log("Configured SSL");
+        Logger.log("Configured SSL with: " + type);
     }
 }

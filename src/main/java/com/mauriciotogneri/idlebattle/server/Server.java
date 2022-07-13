@@ -2,69 +2,58 @@ package com.mauriciotogneri.idlebattle.server;
 
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 
-import org.java_websocket.WebSocket;
-import org.java_websocket.handshake.ClientHandshake;
-import org.java_websocket.server.WebSocketServer;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-
-public class Server extends WebSocketServer
+public class Server extends TextWebSocketHandler
 {
     private final MessageHandler handler;
 
-    public Server(int port, MessageHandler handler)
+    public Server(MessageHandler handler)
     {
-        super(new InetSocketAddress(port));
-
         this.handler = handler;
     }
 
     @Override
-    public void onOpen(@NotNull WebSocket webSocket, @NotNull ClientHandshake clientHandshake)
+    public void afterConnectionEstablished(@NotNull WebSocketSession webSocket) throws Exception
     {
+        super.afterConnectionEstablished(webSocket);
+
         Logger.onConnected(webSocket);
     }
 
     @Override
-    public void onMessage(@NotNull WebSocket webSocket, String message)
+    public void afterConnectionClosed(@NotNull WebSocketSession webSocket, @NotNull CloseStatus status) throws Exception
     {
-        Logger.onMessageReceived(webSocket, message);
-        handler.onMessage(webSocket, Json.message(message));
-    }
+        super.afterConnectionClosed(webSocket, status);
 
-    @Override
-    public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteBuffer message)
-    {
-        onMessage(webSocket, new String(message.array(), StandardCharsets.UTF_8));
-    }
-
-    @Override
-    public void onClose(@NotNull WebSocket webSocket, int code, String reason, boolean remote)
-    {
         Logger.onClosed(webSocket);
         handler.onClose(webSocket);
     }
 
     @Override
-    public void onError(WebSocket webSocket, @NotNull Exception e)
+    protected void handleTextMessage(@NotNull WebSocketSession webSocket, @NotNull TextMessage message) throws Exception
     {
-        Logger.onError(webSocket, e);
+        super.handleTextMessage(webSocket, message);
+
+        Logger.onMessageReceived(webSocket, message.getPayload());
+        handler.onMessage(webSocket, Json.message(message.getPayload()));
     }
 
-    @Override
-    public void onStart()
+    public static void send(@NotNull WebSocketSession webSocket, OutputMessage message)
     {
-        Logger.log("Server started!");
-        setConnectionLostTimeout(100);
-    }
-
-    public static void send(@NotNull WebSocket webSocket, OutputMessage message)
-    {
-        String text = Json.string(message);
-        webSocket.send(text);
-        Logger.onMessageSent(webSocket, text);
+        try
+        {
+            String text = Json.string(message);
+            webSocket.sendMessage(new TextMessage(text));
+            Logger.onMessageSent(webSocket, text);
+        }
+        catch (Exception e)
+        {
+            Logger.log(webSocket, e.getMessage());
+        }
     }
 }

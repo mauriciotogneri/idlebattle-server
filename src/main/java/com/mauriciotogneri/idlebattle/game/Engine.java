@@ -1,14 +1,14 @@
 package com.mauriciotogneri.idlebattle.game;
 
+import com.mauriciotogneri.idlebattle.server.Server;
 import com.mauriciotogneri.idlebattle.app.Constants;
 import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.server.Logger;
-import com.mauriciotogneri.idlebattle.server.Server;
 
-import org.java_websocket.WebSocket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class Engine
     private final List<WaitingPrivatePlayer> waitingPrivate = new ArrayList<>();
     private final Map<String, Match> matches = new HashMap<>();
 
-    public void joinPublic(WebSocket webSocket, String playerName)
+    public void joinPublic(WebSocketSession webSocket, String playerName)
     {
         if (waitingPublic.isEmpty())
         {
@@ -41,7 +41,7 @@ public class Engine
         }
     }
 
-    public void createPrivate(WebSocket webSocket, String playerName)
+    public void createPrivate(WebSocketSession webSocket, String playerName)
     {
         String matchId = Match.newId();
 
@@ -54,7 +54,7 @@ public class Engine
         Server.send(webSocket, OutputMessage.waitingPrivate(matchId));
     }
 
-    public void joinPrivate(WebSocket webSocket, String matchId, String playerName)
+    public void joinPrivate(WebSocketSession webSocket, String matchId, String playerName)
     {
         WaitingPrivatePlayer waitingPlayer = getWaitingPrivate(matchId);
 
@@ -74,7 +74,7 @@ public class Engine
         }
     }
 
-    public void increaseMine(WebSocket webSocket, String matchId)
+    public void increaseMine(WebSocketSession webSocket, String matchId)
     {
         Match match = getMatch(webSocket, matchId);
 
@@ -88,7 +88,7 @@ public class Engine
         }
     }
 
-    public void increaseAttack(WebSocket webSocket, String matchId)
+    public void increaseAttack(WebSocketSession webSocket, String matchId)
     {
         Match match = getMatch(webSocket, matchId);
 
@@ -102,7 +102,7 @@ public class Engine
         }
     }
 
-    public void launchUnits(WebSocket webSocket, String matchId, int laneId, int amount)
+    public void launchUnits(WebSocketSession webSocket, String matchId, int laneId, int amount)
     {
         Match match = getMatch(webSocket, matchId);
 
@@ -116,7 +116,7 @@ public class Engine
         }
     }
 
-    public void echo(WebSocket webSocket, String matchId)
+    public void echo(WebSocketSession webSocket, String matchId)
     {
         Match match = getMatch(webSocket, matchId);
 
@@ -145,7 +145,7 @@ public class Engine
     }
 
     @Nullable
-    private WaitingPrivatePlayer getWaitingPrivate(WebSocket webSocket)
+    private WaitingPrivatePlayer getWaitingPrivate(WebSocketSession webSocket)
     {
         for (WaitingPrivatePlayer waitingPlayer : waitingPrivate)
         {
@@ -159,7 +159,7 @@ public class Engine
     }
 
     @Nullable
-    private Match getMatch(WebSocket webSocket)
+    private Match getMatch(WebSocketSession webSocket)
     {
         for (Match match : matches.values())
         {
@@ -173,7 +173,7 @@ public class Engine
     }
 
     @Nullable
-    private Match getMatch(WebSocket webSocket, String matchId)
+    private Match getMatch(WebSocketSession webSocket, String matchId)
     {
         Match match = matches.get(matchId);
 
@@ -199,7 +199,7 @@ public class Engine
         matches.put(matchId, match);
     }
 
-    public void onClose(@NotNull WebSocket webSocket)
+    public void onClose(@NotNull WebSocketSession webSocket)
     {
         if (!waitingPublic.isEmpty() && waitingPublic.get(0).webSocket == webSocket)
         {

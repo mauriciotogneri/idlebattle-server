@@ -1,14 +1,14 @@
 package com.mauriciotogneri.idlebattle.game;
 
-import org.java_websocket.WebSocket;
+import org.springframework.web.socket.WebSocketSession;
 
 public class WaitingPrivatePlayer
 {
-    public final WebSocket webSocket;
+    public final WebSocketSession webSocket;
     public final String name;
     public final String matchId;
 
-    public WaitingPrivatePlayer(WebSocket webSocket, String name, String matchId)
+    public WaitingPrivatePlayer(WebSocketSession webSocket, String name, String matchId)
     {
         this.webSocket = webSocket;
         this.name = name;

@@ -1,7 +1,7 @@
 package com.mauriciotogneri.idlebattle.server;
 
-import org.java_websocket.WebSocket;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -13,37 +13,37 @@ public class Logger
         System.out.println(message);
     }
 
-    public static void log(WebSocket webSocket, String message)
+    public static void log(WebSocketSession webSocket, String message)
     {
         log(String.format("%s %s", (webSocket != null) ? webSocket.hashCode() : 0, message));
     }
 
-    public static void onConnected(@NotNull WebSocket webSocket)
+    public static void onConnected(@NotNull WebSocketSession webSocket)
     {
         log(webSocket, "[CONNECTED]");
     }
 
-    public static void onDisconnected(@NotNull WebSocket webSocket, String message)
+    public static void onDisconnected(@NotNull WebSocketSession webSocket, String message)
     {
         log(webSocket, String.format("[DISCONNECTED] %s", message));
     }
 
-    public static void onMessageReceived(@NotNull WebSocket webSocket, String message)
+    public static void onMessageReceived(@NotNull WebSocketSession webSocket, String message)
     {
         log(webSocket, String.format("[RECEIVED] %s", message));
     }
 
-    public static void onMessageSent(@NotNull WebSocket webSocket, String message)
+    public static void onMessageSent(@NotNull WebSocketSession webSocket, String message)
     {
         log(webSocket, String.format("[SENT] %s", message));
     }
 
-    public static void onClosed(@NotNull WebSocket webSocket)
+    public static void onClosed(@NotNull WebSocketSession webSocket)
     {
         log(webSocket, "[CLOSED]");
     }
 
-    public static void onError(WebSocket webSocket, @NotNull Exception e)
+    public static void onError(WebSocketSession webSocket, @NotNull Exception e)
     {
         StringWriter stringWriter = new StringWriter();
         e.printStackTrace(new PrintWriter(stringWriter));

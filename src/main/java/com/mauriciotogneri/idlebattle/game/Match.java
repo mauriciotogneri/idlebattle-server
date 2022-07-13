@@ -1,16 +1,16 @@
 package com.mauriciotogneri.idlebattle.game;
 
+import com.mauriciotogneri.idlebattle.server.Server;
 import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 import com.mauriciotogneri.idlebattle.messages.MatchStatus;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.messages.PlayerStatus;
-import com.mauriciotogneri.idlebattle.server.Server;
 import com.mauriciotogneri.idlebattle.types.FinishState;
 import com.mauriciotogneri.idlebattle.types.MatchState;
 
-import org.java_websocket.WebSocket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +60,7 @@ public class Match
         }
     }
 
-    public boolean hasConnection(WebSocket webSocket)
+    public boolean hasConnection(WebSocketSession webSocket)
     {
         Player player = byWebSocket(webSocket);
 
@@ -68,7 +68,7 @@ public class Match
     }
 
     @Nullable
-    public Player onPlayerDisconnected(WebSocket webSocket)
+    public Player onPlayerDisconnected(WebSocketSession webSocket)
     {
         Player disconnectedPlayer = byWebSocket(webSocket);
 
@@ -90,7 +90,7 @@ public class Match
         return disconnectedPlayer;
     }
 
-    public void onPlayerIncreaseMine(WebSocket webSocket)
+    public void onPlayerIncreaseMine(WebSocketSession webSocket)
     {
         Player player = byWebSocket(webSocket);
 
@@ -105,7 +105,7 @@ public class Match
         }
     }
 
-    public void onPlayerIncreaseAttack(WebSocket webSocket)
+    public void onPlayerIncreaseAttack(WebSocketSession webSocket)
     {
         Player player = byWebSocket(webSocket);
 
@@ -120,7 +120,7 @@ public class Match
         }
     }
 
-    public void onPlayerLaunchUnits(WebSocket webSocket, int laneId, int amount)
+    public void onPlayerLaunchUnits(WebSocketSession webSocket, int laneId, int amount)
     {
         Player player = byWebSocket(webSocket);
 
@@ -177,7 +177,7 @@ public class Match
     }
 
     @Nullable
-    private Player byWebSocket(WebSocket webSocket)
+    private Player byWebSocket(WebSocketSession webSocket)
     {
         for (Player player : players)
         {

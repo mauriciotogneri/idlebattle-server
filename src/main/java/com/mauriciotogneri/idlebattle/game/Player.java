@@ -1,17 +1,17 @@
 package com.mauriciotogneri.idlebattle.game;
 
+import com.mauriciotogneri.idlebattle.server.Server;
 import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.messages.PlayerStatus;
-import com.mauriciotogneri.idlebattle.server.Server;
 
-import org.java_websocket.WebSocket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.web.socket.WebSocketSession;
 
 public class Player
 {
-    private final WebSocket webSocket;
+    private final WebSocketSession webSocket;
     private final String name;
     private final int direction;
 
@@ -20,7 +20,7 @@ public class Player
     private int mineLevel = 1;
     private int attackLevel = 1;
 
-    public Player(WebSocket webSocket, String name, int direction, double money)
+    public Player(WebSocketSession webSocket, String name, int direction, double money)
     {
         this.webSocket = webSocket;
         this.name = name;
@@ -43,7 +43,7 @@ public class Player
         return name;
     }
 
-    public boolean has(WebSocket webSocket)
+    public boolean has(WebSocketSession webSocket)
     {
         return (this.webSocket == webSocket);
     }
@@ -124,7 +124,7 @@ public class Player
                 isSelf,
                 direction,
                 points,
-                isSelf ? (int)money : null,
+                isSelf ? (int) money : null,
                 isSelf ? mineLevel : null,
                 isSelf ? attackLevel : null
         );

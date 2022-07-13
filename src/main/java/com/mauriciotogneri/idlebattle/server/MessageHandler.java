@@ -4,8 +4,8 @@ import com.mauriciotogneri.idlebattle.game.Engine;
 import com.mauriciotogneri.idlebattle.messages.InputMessage;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 
-import org.java_websocket.WebSocket;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.web.socket.WebSocketSession;
 
 public class MessageHandler
 {
@@ -16,7 +16,7 @@ public class MessageHandler
         this.engine = engine;
     }
 
-    public synchronized void onMessage(@NotNull WebSocket webSocket, @NotNull InputMessage message)
+    public synchronized void onMessage(@NotNull WebSocketSession webSocket, @NotNull InputMessage message)
     {
         switch (message.event)
         {
@@ -54,7 +54,7 @@ public class MessageHandler
         }
     }
 
-    private void joinPublic(WebSocket webSocket, @NotNull InputMessage message)
+    private void joinPublic(WebSocketSession webSocket, @NotNull InputMessage message)
     {
         String playerName = message.playerName;
 
@@ -68,7 +68,7 @@ public class MessageHandler
         }
     }
 
-    private void createPrivate(WebSocket webSocket, @NotNull InputMessage message)
+    private void createPrivate(WebSocketSession webSocket, @NotNull InputMessage message)
     {
         String playerName = message.playerName;
 
@@ -82,7 +82,7 @@ public class MessageHandler
         }
     }
 
-    private void joinPrivate(WebSocket webSocket, @NotNull InputMessage message)
+    private void joinPrivate(WebSocketSession webSocket, @NotNull InputMessage message)
     {
         String matchId = message.matchId;
         String playerName = message.playerName;
@@ -101,7 +101,7 @@ public class MessageHandler
         }
     }
 
-    private void increaseMine(WebSocket webSocket, @NotNull InputMessage message)
+    private void increaseMine(WebSocketSession webSocket, @NotNull InputMessage message)
     {
         String matchId = message.matchId;
 
@@ -115,7 +115,7 @@ public class MessageHandler
         }
     }
 
-    private void increaseAttack(WebSocket webSocket, @NotNull InputMessage message)
+    private void increaseAttack(WebSocketSession webSocket, @NotNull InputMessage message)
     {
         String matchId = message.matchId;
 
@@ -129,7 +129,7 @@ public class MessageHandler
         }
     }
 
-    private void launchUnits(WebSocket webSocket, @NotNull InputMessage message)
+    private void launchUnits(WebSocketSession webSocket, @NotNull InputMessage message)
     {
         String matchId = message.matchId;
         Integer laneId = message.laneId;
@@ -153,12 +153,12 @@ public class MessageHandler
         }
     }
 
-    private void disconnect(WebSocket webSocket)
+    private void disconnect(WebSocketSession webSocket)
     {
         engine.onClose(webSocket);
     }
 
-    private void echo(WebSocket webSocket, @NotNull InputMessage message)
+    private void echo(WebSocketSession webSocket, @NotNull InputMessage message)
     {
         String matchId = message.matchId;
 
@@ -172,7 +172,7 @@ public class MessageHandler
         }
     }
 
-    public synchronized void onClose(@NotNull WebSocket webSocket)
+    public synchronized void onClose(@NotNull WebSocketSession webSocket)
     {
         engine.onClose(webSocket);
     }

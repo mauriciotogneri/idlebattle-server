@@ -108,8 +108,8 @@ public class GrizzlySslServerContainer extends ServerContainerFactory
                 }
 
                 NetworkListener networkListener = new NetworkListener("grizzly", "0.0.0.0", port);
-                networkListener.setSecure(true);
-                networkListener.setSSLEngineConfig(sslEngineConfigurator);
+                //networkListener.setSecure(true);
+                //networkListener.setSSLEngineConfig(sslEngineConfigurator);
 
                 //Map<String, Object> properties = new HashMap<>();
                 //properties.put(ClientProperties.SSL_ENGINE_CONFIGURATOR, sslEngineConfigurator);

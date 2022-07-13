@@ -1,4 +1,4 @@
-package com.mauriciotogneri.idlebattle.server;
+package com.mauriciotogneri.idlebattle.utils;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.socket.WebSocketSession;

@@ -1,4 +1,4 @@
-package com.mauriciotogneri.idlebattle.server;
+package com.mauriciotogneri.idlebattle.utils;
 
 import com.google.gson.Gson;
 import com.mauriciotogneri.idlebattle.messages.InputMessage;

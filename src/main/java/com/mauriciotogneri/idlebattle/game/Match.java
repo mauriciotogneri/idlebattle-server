@@ -8,6 +8,7 @@ import com.mauriciotogneri.idlebattle.messages.PlayerStatus;
 import com.mauriciotogneri.idlebattle.server.Server;
 import com.mauriciotogneri.idlebattle.types.FinishState;
 import com.mauriciotogneri.idlebattle.types.MatchState;
+import com.mauriciotogneri.idlebattle.utils.MatchTimes;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,11 +23,12 @@ public class Match
     private final List<Player> players;
     private final Lane[] lanes;
     private final MatchConfiguration configuration;
+    private final MatchTimes matchTimes;
     private MatchState state = MatchState.READY;
     private double readyTime = 0;
     private double totalTime = 0;
 
-    public Match(String id, List<Player> players, @NotNull MatchConfiguration configuration)
+    public Match(String id, List<Player> players, @NotNull MatchConfiguration configuration, MatchTimes matchTimes)
     {
         this.id = id;
         this.players = players;
@@ -39,6 +41,7 @@ public class Match
         }
 
         this.configuration = configuration;
+        this.matchTimes = matchTimes;
     }
 
     public String id()
@@ -82,7 +85,7 @@ public class Match
 
             if (!hasPlayers())
             {
-                state = MatchState.FINISHED;
+                finishMatch(false);
             }
         }
 
@@ -318,10 +321,17 @@ public class Match
                 }
             }
 
-            state = MatchState.FINISHED;
+            finishMatch(true);
         }
 
         return (winner != null);
+    }
+
+    private void finishMatch(boolean writeTime)
+    {
+        state = MatchState.FINISHED;
+
+        matchTimes.write((int)totalTime);
     }
 
     private void checkWinnerByTerritory()
@@ -338,19 +348,19 @@ public class Match
             {
                 player1.send(OutputMessage.matchFinished(FinishState.WON));
                 player2.send(OutputMessage.matchFinished(FinishState.LOST));
-                state = MatchState.FINISHED;
+                finishMatch(true);
             }
             else if (player2Percentage > player1Percentage)
             {
                 player2.send(OutputMessage.matchFinished(FinishState.WON));
                 player1.send(OutputMessage.matchFinished(FinishState.LOST));
-                state = MatchState.FINISHED;
+                finishMatch(true);
             }
             else
             {
                 player1.send(OutputMessage.matchFinished(FinishState.TIE));
                 player2.send(OutputMessage.matchFinished(FinishState.TIE));
-                state = MatchState.FINISHED;
+                finishMatch(true);
             }
         }
     }

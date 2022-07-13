@@ -4,7 +4,8 @@ import com.mauriciotogneri.idlebattle.server.Server;
 import com.mauriciotogneri.idlebattle.app.Constants;
 import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
-import com.mauriciotogneri.idlebattle.server.Logger;
+import com.mauriciotogneri.idlebattle.utils.Logger;
+import com.mauriciotogneri.idlebattle.utils.MatchTimes;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,6 +21,7 @@ public class Engine
     private final List<WaitingPublicPlayer> waitingPublic = new ArrayList<>();
     private final List<WaitingPrivatePlayer> waitingPrivate = new ArrayList<>();
     private final Map<String, Match> matches = new HashMap<>();
+    private final MatchTimes matchTimes = new MatchTimes();
 
     public void joinPublic(WebSocketSession webSocket, String playerName)
     {
@@ -193,7 +195,7 @@ public class Engine
         players.add(player1);
         players.add(player2);
 
-        Match match = new Match(matchId, players, configuration);
+        Match match = new Match(matchId, players, configuration, matchTimes);
         match.start();
 
         matches.put(matchId, match);

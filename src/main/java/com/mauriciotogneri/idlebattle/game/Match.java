@@ -1,10 +1,11 @@
 package com.mauriciotogneri.idlebattle.game;
 
-import com.mauriciotogneri.idlebattle.server.Server;
+import com.mauriciotogneri.idlebattle.messages.LaneStatus;
 import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 import com.mauriciotogneri.idlebattle.messages.MatchStatus;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.messages.PlayerStatus;
+import com.mauriciotogneri.idlebattle.server.Server;
 import com.mauriciotogneri.idlebattle.types.FinishState;
 import com.mauriciotogneri.idlebattle.types.MatchState;
 
@@ -12,11 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.web.socket.WebSocketSession;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class Match
 {
@@ -206,18 +204,33 @@ public class Match
                 id,
                 (int) (configuration.matchTimeout - totalTime),
                 playerStatus(players, player),
-                Arrays.stream(lanes).map(Lane::status).collect(Collectors.toList())
+                laneStatus(lanes)
         );
     }
 
     @NotNull
-    private List<PlayerStatus> playerStatus(@NotNull List<Player> players, Player self)
+    private PlayerStatus @NotNull [] playerStatus(@NotNull List<Player> players, Player self)
     {
-        List<PlayerStatus> result = new ArrayList<>();
+        PlayerStatus[] result = new PlayerStatus[players.size()];
 
-        for (Player player : players)
+        for (int i = 0; i < players.size(); i++)
         {
-            result.add(player.status(player == self));
+            Player player = players.get(i);
+            result[i] = player.status(player == self);
+        }
+
+        return result;
+    }
+
+    @NotNull
+    private LaneStatus @NotNull [] laneStatus(Lane @NotNull [] lanes)
+    {
+        LaneStatus[] result = new LaneStatus[lanes.length];
+
+        for (int i = 0; i < lanes.length; i++)
+        {
+            Lane lane = lanes[i];
+            result[i] = lane.status();
         }
 
         return result;

@@ -279,8 +279,6 @@ public class Match
 
     public void update(double dt)
     {
-        System.out.println(totalTime);
-
         if ((state == MatchState.RUNNING) && (players.length == 2))
         {
             totalTime += dt;

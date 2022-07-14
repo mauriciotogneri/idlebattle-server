@@ -6,9 +6,10 @@ import com.mauriciotogneri.idlebattle.messages.MatchStatus;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.messages.PlayerStatus;
 import com.mauriciotogneri.idlebattle.server.Server;
+import com.mauriciotogneri.idlebattle.statistics.MatchStats;
+import com.mauriciotogneri.idlebattle.types.EndReason;
 import com.mauriciotogneri.idlebattle.types.FinishState;
 import com.mauriciotogneri.idlebattle.types.MatchState;
-import com.mauriciotogneri.idlebattle.utils.MatchTimes;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,13 +24,13 @@ public class Match
     private final String id;
     private final Lane[] lanes;
     private final MatchConfiguration configuration;
-    private final MatchTimes matchTimes;
+    private final MatchStats matchStats;
     private Player[] players;
     private MatchState state = MatchState.READY;
     private double readyTime = 0;
     private double totalTime = 0;
 
-    public Match(String id, @NotNull List<Player> players, @NotNull MatchConfiguration configuration, MatchTimes matchTimes)
+    public Match(String id, @NotNull List<Player> players, @NotNull MatchConfiguration configuration)
     {
         this.id = id;
         this.players = playersList(players);
@@ -41,7 +42,7 @@ public class Match
         }
 
         this.configuration = configuration;
-        this.matchTimes = matchTimes;
+        this.matchStats = new MatchStats(id);
     }
 
     public String id()
@@ -100,7 +101,7 @@ public class Match
 
             if (!hasPlayers())
             {
-                finishMatch(false);
+                finishMatch(EndReason.DISCONNECTED);
             }
         }
 
@@ -336,20 +337,16 @@ public class Match
                 }
             }
 
-            finishMatch(true);
+            finishMatch(EndReason.POINTS);
         }
 
         return (winner != null);
     }
 
-    private void finishMatch(boolean writeTime)
+    private void finishMatch(EndReason endReason)
     {
         state = MatchState.FINISHED;
-
-        if (writeTime)
-        {
-            matchTimes.write((int) totalTime);
-        }
+        matchStats.collect(endReason);
     }
 
     private void checkWinnerByTerritory()
@@ -366,20 +363,19 @@ public class Match
             {
                 player1.send(OutputMessage.matchFinished(FinishState.WON));
                 player2.send(OutputMessage.matchFinished(FinishState.LOST));
-                finishMatch(true);
             }
             else if (player2Percentage > player1Percentage)
             {
                 player2.send(OutputMessage.matchFinished(FinishState.WON));
                 player1.send(OutputMessage.matchFinished(FinishState.LOST));
-                finishMatch(true);
             }
             else
             {
                 player1.send(OutputMessage.matchFinished(FinishState.TIE));
                 player2.send(OutputMessage.matchFinished(FinishState.TIE));
-                finishMatch(true);
             }
+
+            finishMatch(EndReason.TERRITORY);
         }
     }
 

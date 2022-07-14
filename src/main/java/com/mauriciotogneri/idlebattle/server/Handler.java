@@ -7,11 +7,11 @@ import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.socket.WebSocketSession;
 
-public class MessageHandler
+public class Handler
 {
     private final Engine engine;
 
-    public MessageHandler(Engine engine)
+    public Handler(Engine engine)
     {
         this.engine = engine;
     }

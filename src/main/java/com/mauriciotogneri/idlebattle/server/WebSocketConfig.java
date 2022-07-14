@@ -15,11 +15,11 @@ public class WebSocketConfig implements WebSocketConfigurer
     @Override
     public void registerWebSocketHandlers(@NotNull WebSocketHandlerRegistry webSocketHandlerRegistry)
     {
-        MessageHandler messageHandler = new MessageHandler(new Engine());
-        new Thread(new Loop(messageHandler)).start();
+        Handler handler = new Handler(new Engine());
+        new Thread(new Loop(handler)).start();
 
         webSocketHandlerRegistry
-                .addHandler(new Server(messageHandler), "/idlebattle")
+                .addHandler(new Server(handler), "/idlebattle")
                 .setAllowedOriginPatterns("*");
     }
 }

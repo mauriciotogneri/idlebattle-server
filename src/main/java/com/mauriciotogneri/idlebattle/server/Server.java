@@ -12,9 +12,9 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 public class Server extends TextWebSocketHandler
 {
-    private final MessageHandler handler;
+    private final Handler handler;
 
-    public Server(MessageHandler handler)
+    public Server(Handler handler)
     {
         this.handler = handler;
     }

@@ -5,11 +5,11 @@ import com.mauriciotogneri.idlebattle.utils.Logger;
 
 public class Loop implements Runnable
 {
-    private final MessageHandler messageHandler;
+    private final Handler handler;
 
-    public Loop(MessageHandler messageHandler)
+    public Loop(Handler handler)
     {
-        this.messageHandler = messageHandler;
+        this.handler = handler;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class Loop implements Runnable
                 double dt = (currentTimestamp - lastTimestamp) / 1000000000d; // in seconds
                 lastTimestamp = currentTimestamp;
 
-                messageHandler.update(dt);
+                handler.update(dt);
             }
             catch (Exception e)
             {

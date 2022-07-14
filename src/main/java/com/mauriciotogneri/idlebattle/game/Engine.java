@@ -36,9 +36,8 @@ public class Engine
 
             MatchConfiguration configuration = MatchConfiguration.fromFile();
             String matchId = Match.newId();
-            Player player1 = new Player(waitingPlayer.webSocket, waitingPlayer.name, Constants.DIRECTION_UP, configuration.initialMoney);
-            Player player2 = new Player(webSocket, playerName, Constants.DIRECTION_DOWN, configuration.initialMoney);
-
+            Player player1 = new Player(waitingPlayer.webSocket, waitingPlayer.name, Constants.DIRECTION_UP, configuration);
+            Player player2 = new Player(webSocket, playerName, Constants.DIRECTION_DOWN, configuration);
             startMatch(matchId, configuration, player1, player2);
         }
     }
@@ -65,9 +64,8 @@ public class Engine
             waitingPrivate.remove(waitingPlayer);
 
             MatchConfiguration configuration = MatchConfiguration.fromFile();
-            Player player1 = new Player(waitingPlayer.webSocket, waitingPlayer.name, Constants.DIRECTION_UP, configuration.initialMoney);
-            Player player2 = new Player(webSocket, playerName, Constants.DIRECTION_DOWN, configuration.initialMoney);
-
+            Player player1 = new Player(waitingPlayer.webSocket, waitingPlayer.name, Constants.DIRECTION_UP, configuration);
+            Player player2 = new Player(webSocket, playerName, Constants.DIRECTION_DOWN, configuration);
             startMatch(matchId, configuration, player1, player2);
         }
         else

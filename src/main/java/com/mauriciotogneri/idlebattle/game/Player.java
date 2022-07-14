@@ -11,6 +11,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 public class Player
 {
+    private final MatchConfiguration configuration;
     private final WebSocketSession webSocket;
     private final String name;
     private final int direction;
@@ -20,12 +21,13 @@ public class Player
     private int mineLevel = 1;
     private int attackLevel = 1;
 
-    public Player(WebSocketSession webSocket, String name, int direction, double money)
+    public Player(WebSocketSession webSocket, String name, int direction, @NotNull MatchConfiguration configuration)
     {
+        this.configuration = configuration;
         this.webSocket = webSocket;
         this.name = name;
         this.direction = direction;
-        this.money = money;
+        this.money = configuration.initialMoney;
     }
 
     public int direction()
@@ -97,9 +99,9 @@ public class Player
         }
     }
 
-    public void update(int moneyRate, double dt)
+    public void update(double dt)
     {
-        money += mineLevel * moneyRate * dt;
+        money += mineLevel * configuration.moneyRate * dt;
     }
 
     public void addPoint()

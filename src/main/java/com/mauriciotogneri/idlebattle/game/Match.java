@@ -252,7 +252,7 @@ public class Match
 
             for (Player player : players)
             {
-                player.update(configuration.moneyRate, dt);
+                player.update(dt);
             }
 
             boolean sendUpdate = false;

@@ -55,7 +55,7 @@ public class Server extends TextWebSocketHandler
         }
         catch (Exception e)
         {
-            Logger.onError(webSocket, e);
+            Logger.onError(e);
         }
     }
 }

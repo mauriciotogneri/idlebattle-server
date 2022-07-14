@@ -240,7 +240,7 @@ public class Engine
             }
         }
 
-        Logger.log(webSocket, "Connection not found in any entity");
+        Logger.log(webSocket, "Connection not found");
     }
 
     public void update(double dt)

@@ -29,7 +29,7 @@ public class MatchTimes
         }
         catch (Exception e)
         {
-            Logger.log(e.getMessage());
+            Logger.onError(e);
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.mauriciotogneri.idlebattle.server;
 
 import com.mauriciotogneri.idlebattle.app.Constants;
+import com.mauriciotogneri.idlebattle.utils.Logger;
 
 public class Loop implements Runnable
 {
@@ -30,7 +31,7 @@ public class Loop implements Runnable
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                Logger.onError(e);
             }
         }
     }

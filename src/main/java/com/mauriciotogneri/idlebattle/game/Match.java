@@ -246,17 +246,7 @@ public class Match
 
     public void update(double dt)
     {
-        if (state == MatchState.READY)
-        {
-            readyTime += dt;
-
-            if (readyTime >= configuration.readyTimeout)
-            {
-                state = MatchState.RUNNING;
-                broadcast(OutputMessage.matchStarted());
-            }
-        }
-        else if ((state == MatchState.RUNNING) && (players.size() == 2))
+        if ((state == MatchState.RUNNING) && (players.size() == 2))
         {
             totalTime += dt;
 
@@ -283,6 +273,16 @@ public class Match
                 {
                     checkWinnerByTerritory();
                 }
+            }
+        }
+        else if (state == MatchState.READY)
+        {
+            readyTime += dt;
+
+            if (readyTime >= configuration.readyTimeout)
+            {
+                state = MatchState.RUNNING;
+                broadcast(OutputMessage.matchStarted());
             }
         }
     }

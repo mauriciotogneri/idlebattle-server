@@ -8,7 +8,7 @@ import java.io.StringWriter;
 
 public class Logger
 {
-    public static void log(String message)
+    private static void log(String message)
     {
         System.out.println(message);
     }
@@ -45,10 +45,19 @@ public class Logger
 
     public static void onError(WebSocketSession webSocket, @NotNull Exception e)
     {
+        log(webSocket, String.format("[ERROR] %s | %s", e.getLocalizedMessage(), stackTrace(e)));
+    }
+
+    public static void onError(@NotNull Exception e)
+    {
+        log(String.format("[ERROR] %s | %s", e.getLocalizedMessage(), stackTrace(e)));
+    }
+
+    private static String stackTrace(@NotNull Exception e)
+    {
         StringWriter stringWriter = new StringWriter();
         e.printStackTrace(new PrintWriter(stringWriter));
-        String stackTrace = stringWriter.toString();
 
-        log(webSocket, String.format("[ERROR] %s | %s", e.getLocalizedMessage(), stackTrace));
+        return stringWriter.toString();
     }
 }

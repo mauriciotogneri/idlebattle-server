@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.web.socket.WebSocketSession;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -93,7 +94,7 @@ public class Match
         {
             PlayerStats[] playerStats = playerStats(players);
 
-            List<Player> list = Arrays.asList(players);
+            List<Player> list =  new ArrayList<>(Arrays.asList(players));
             list.remove(disconnectedPlayer);
             players = playersList(list);
 

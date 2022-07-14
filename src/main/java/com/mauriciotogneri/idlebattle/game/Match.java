@@ -43,7 +43,7 @@ public class Match
         }
 
         this.configuration = configuration;
-        this.statistics = new Statistics(id);
+        this.statistics = new Statistics(id, configuration);
     }
 
     public String id()

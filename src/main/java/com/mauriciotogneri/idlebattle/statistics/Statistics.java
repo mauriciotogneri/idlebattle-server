@@ -1,6 +1,7 @@
 package com.mauriciotogneri.idlebattle.statistics;
 
 import com.mauriciotogneri.idlebattle.formatter.DateFormatter;
+import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 import com.mauriciotogneri.idlebattle.types.EndReason;
 import com.mauriciotogneri.idlebattle.utils.Json;
 import com.mauriciotogneri.idlebattle.utils.Logger;
@@ -16,15 +17,16 @@ public class Statistics
 {
     private final String matchId;
     private final String fileName;
+    private final MatchConfiguration configuration;
     private final LocalDateTime timestampStart;
     private LocalDateTime timestampEnd;
 
     //private final Lane[] lanes;
-    //private final MatchConfiguration configuration;
 
-    public Statistics(String matchId)
+    public Statistics(String matchId, MatchConfiguration configuration)
     {
         this.matchId = matchId;
+        this.configuration = configuration;
         this.timestampStart = LocalDateTime.now();
         this.fileName = String.format("%s_%s", DateFormatter.format(timestampStart), matchId);
     }
@@ -39,6 +41,7 @@ public class Statistics
                                                DateFormatter.format(timestampEnd),
                                                matchTime,
                                                endReason,
+                                               configuration,
                                                players);
 
         return Json.string(matchStats);

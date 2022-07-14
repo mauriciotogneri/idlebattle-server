@@ -30,6 +30,11 @@ public class Player
         this.money = configuration.initialMoney;
     }
 
+    public WebSocketSession webSocket()
+    {
+        return webSocket;
+    }
+
     public int direction()
     {
         return direction;

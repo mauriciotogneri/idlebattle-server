@@ -49,6 +49,11 @@ public class Match
         return id;
     }
 
+    public Player[] players()
+    {
+        return players;
+    }
+
     public boolean hasPlayers()
     {
         return (players.length > 0);

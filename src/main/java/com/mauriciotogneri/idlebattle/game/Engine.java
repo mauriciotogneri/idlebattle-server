@@ -1,9 +1,9 @@
 package com.mauriciotogneri.idlebattle.game;
 
-import com.mauriciotogneri.idlebattle.server.Server;
 import com.mauriciotogneri.idlebattle.app.Constants;
 import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
+import com.mauriciotogneri.idlebattle.server.Server;
 import com.mauriciotogneri.idlebattle.utils.Logger;
 import com.mauriciotogneri.idlebattle.utils.MatchTimes;
 
@@ -12,15 +12,13 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Engine
 {
     private final List<WaitingPublicPlayer> waitingPublic = new ArrayList<>();
     private final List<WaitingPrivatePlayer> waitingPrivate = new ArrayList<>();
-    private final Map<String, Match> matches = new HashMap<>();
+    private final Matches matches = new Matches();
     private final MatchTimes matchTimes = new MatchTimes();
 
     public void joinPublic(WebSocketSession webSocket, String playerName)
@@ -76,7 +74,7 @@ public class Engine
 
     public void increaseMine(WebSocketSession webSocket, String matchId)
     {
-        Match match = getMatch(webSocket, matchId);
+        Match match = matches.get(webSocket, matchId);
 
         if (match != null)
         {
@@ -90,7 +88,7 @@ public class Engine
 
     public void increaseAttack(WebSocketSession webSocket, String matchId)
     {
-        Match match = getMatch(webSocket, matchId);
+        Match match = matches.get(webSocket, matchId);
 
         if (match != null)
         {
@@ -104,7 +102,7 @@ public class Engine
 
     public void launchUnits(WebSocketSession webSocket, String matchId, int laneId, int amount)
     {
-        Match match = getMatch(webSocket, matchId);
+        Match match = matches.get(webSocket, matchId);
 
         if (match != null)
         {
@@ -118,7 +116,7 @@ public class Engine
 
     public void echo(WebSocketSession webSocket, String matchId)
     {
-        Match match = getMatch(webSocket, matchId);
+        Match match = matches.get(webSocket, matchId);
 
         if (match != null)
         {
@@ -158,35 +156,6 @@ public class Engine
         return null;
     }
 
-    @Nullable
-    private Match getMatch(WebSocketSession webSocket)
-    {
-        for (Match match : matches.values())
-        {
-            if (match.hasConnection(webSocket))
-            {
-                return match;
-            }
-        }
-
-        return null;
-    }
-
-    @Nullable
-    private Match getMatch(WebSocketSession webSocket, String matchId)
-    {
-        Match match = matches.get(matchId);
-
-        if ((match != null) && match.hasConnection(webSocket))
-        {
-            return match;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
     private void startMatch(String matchId, MatchConfiguration configuration, @NotNull Player player1, @NotNull Player player2)
     {
         List<Player> players = new ArrayList<>();
@@ -196,7 +165,7 @@ public class Engine
         Match match = new Match(matchId, players, configuration, matchTimes);
         match.start();
 
-        matches.put(matchId, match);
+        matches.add(match);
     }
 
     public void onClose(@NotNull WebSocketSession webSocket)
@@ -219,7 +188,7 @@ public class Engine
             return;
         }
 
-        Match match = getMatch(webSocket);
+        Match match = matches.get(webSocket);
 
         if (match != null)
         {
@@ -227,7 +196,7 @@ public class Engine
 
             if (!match.hasPlayers())
             {
-                removeMatch(match);
+                matches.remove(match);
             }
 
             if (player != null)
@@ -243,19 +212,14 @@ public class Engine
 
     public void update(double dt)
     {
-        for (Match match : matches.values())
+        for (Match match : matches.list())
         {
             match.update(dt);
 
             if (match.isFinished())
             {
-                removeMatch(match);
+                matches.remove(match);
             }
         }
-    }
-
-    private void removeMatch(@NotNull Match match)
-    {
-        matches.remove(match.id());
     }
 }

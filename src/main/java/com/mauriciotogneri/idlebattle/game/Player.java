@@ -1,9 +1,10 @@
 package com.mauriciotogneri.idlebattle.game;
 
-import com.mauriciotogneri.idlebattle.server.Server;
 import com.mauriciotogneri.idlebattle.messages.MatchConfiguration;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.messages.PlayerStatus;
+import com.mauriciotogneri.idlebattle.server.Server;
+import com.mauriciotogneri.idlebattle.statistics.PlayerStats;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -134,6 +135,18 @@ public class Player
                 isSelf ? (int) money : null,
                 isSelf ? mineLevel : null,
                 isSelf ? attackLevel : null
+        );
+    }
+
+    public PlayerStats stats()
+    {
+        return new PlayerStats(
+                name,
+                direction,
+                points,
+                money,
+                mineLevel,
+                attackLevel
         );
     }
 }

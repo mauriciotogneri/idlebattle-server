@@ -6,7 +6,8 @@ import com.mauriciotogneri.idlebattle.messages.MatchStatus;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.messages.PlayerStatus;
 import com.mauriciotogneri.idlebattle.server.Server;
-import com.mauriciotogneri.idlebattle.statistics.MatchStats;
+import com.mauriciotogneri.idlebattle.statistics.PlayerStats;
+import com.mauriciotogneri.idlebattle.statistics.Statistics;
 import com.mauriciotogneri.idlebattle.types.EndReason;
 import com.mauriciotogneri.idlebattle.types.FinishState;
 import com.mauriciotogneri.idlebattle.types.MatchState;
@@ -24,7 +25,7 @@ public class Match
     private final String id;
     private final Lane[] lanes;
     private final MatchConfiguration configuration;
-    private final MatchStats matchStats;
+    private final Statistics statistics;
     private Player[] players;
     private MatchState state = MatchState.READY;
     private double readyTime = 0;
@@ -42,7 +43,7 @@ public class Match
         }
 
         this.configuration = configuration;
-        this.matchStats = new MatchStats(id);
+        this.statistics = new Statistics(id);
     }
 
     public String id()
@@ -90,6 +91,8 @@ public class Match
 
         if (disconnectedPlayer != null)
         {
+            PlayerStats[] playerStats = playerStats(players);
+
             List<Player> list = Arrays.asList(players);
             list.remove(disconnectedPlayer);
             players = playersList(list);
@@ -101,7 +104,7 @@ public class Match
 
             if (!hasPlayers())
             {
-                finishMatch(EndReason.DISCONNECTED);
+                finishMatch(EndReason.DISCONNECTED, playerStats);
             }
         }
 
@@ -222,13 +225,13 @@ public class Match
         return new MatchStatus(
                 id,
                 (int) (configuration.matchTimeout - totalTime),
-                playerStatus(players, player),
-                laneStatus(lanes)
+                playerStatus(player),
+                laneStatus()
         );
     }
 
     @NotNull
-    private PlayerStatus @NotNull [] playerStatus(Player @NotNull [] players, Player self)
+    private PlayerStatus @NotNull [] playerStatus(Player self)
     {
         PlayerStatus[] result = new PlayerStatus[players.length];
 
@@ -242,7 +245,7 @@ public class Match
     }
 
     @NotNull
-    private LaneStatus @NotNull [] laneStatus(Lane @NotNull [] lanes)
+    private LaneStatus @NotNull [] laneStatus()
     {
         LaneStatus[] result = new LaneStatus[lanes.length];
 
@@ -250,6 +253,20 @@ public class Match
         {
             Lane lane = lanes[i];
             result[i] = lane.status();
+        }
+
+        return result;
+    }
+
+    @NotNull
+    private PlayerStats @NotNull [] playerStats(Player @NotNull [] players)
+    {
+        PlayerStats[] result = new PlayerStats[players.length];
+
+        for (int i = 0; i < players.length; i++)
+        {
+            Player player = players[i];
+            result[i] = player.stats();
         }
 
         return result;
@@ -337,16 +354,16 @@ public class Match
                 }
             }
 
-            finishMatch(EndReason.POINTS);
+            finishMatch(EndReason.POINTS, playerStats(players));
         }
 
         return (winner != null);
     }
 
-    private void finishMatch(EndReason endReason)
+    private void finishMatch(EndReason endReason, PlayerStats[] playerStats)
     {
         state = MatchState.FINISHED;
-        matchStats.collect(endReason);
+        statistics.collect(endReason, playerStats);
     }
 
     private void checkWinnerByTerritory()
@@ -375,7 +392,7 @@ public class Match
                 player2.send(OutputMessage.matchFinished(FinishState.TIE));
             }
 
-            finishMatch(EndReason.TERRITORY);
+            finishMatch(EndReason.TERRITORY, playerStats(players));
         }
     }
 

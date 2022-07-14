@@ -205,19 +205,26 @@ public class Engine
             }
         }
 
-        Logger.log(webSocket, "Connection not found");
+        Logger.onDisconnected(webSocket, "Connection not found");
     }
 
     public void update(double dt)
     {
+        List<Match> matchesToRemove = new ArrayList<>();
+
         for (Match match : matches.list())
         {
             match.update(dt);
 
             if (match.isFinished())
             {
-                matches.remove(match);
+                matchesToRemove.add(match);
             }
+        }
+
+        for (Match match : matchesToRemove)
+        {
+            matches.remove(match);
         }
     }
 }

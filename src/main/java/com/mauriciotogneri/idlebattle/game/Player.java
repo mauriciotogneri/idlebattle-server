@@ -144,7 +144,7 @@ public class Player
                 name,
                 direction,
                 points,
-                money,
+                (int) money,
                 mineLevel,
                 attackLevel
         );

@@ -5,14 +5,14 @@ public class PlayerStats
     public final String name;
     public final Integer direction;
     public final Integer points;
-    public final Double money;
+    public final Integer money;
     public final Integer mineLevel;
     public final Integer attackLevel;
 
     public PlayerStats(String name,
                        Integer direction,
                        Integer points,
-                       Double money,
+                       Integer money,
                        Integer mineLevel,
                        Integer attackLevel)
     {

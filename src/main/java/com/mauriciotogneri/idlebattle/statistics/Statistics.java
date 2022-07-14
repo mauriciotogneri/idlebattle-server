@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Statistics
@@ -29,11 +28,8 @@ public class Statistics
         this.fileName = String.format("%s_%s", DateFormatter.format(timestampStart), matchId);
     }
 
-    private @NotNull String content(EndReason endReason, PlayerStats[] players)
+    private @NotNull String content(int matchTime, EndReason endReason, PlayerStats[] players)
     {
-        Duration duration = Duration.between(timestampStart, timestampEnd);
-        int matchTime = (int) duration.getSeconds();
-
         MatchStats matchStats = new MatchStats(matchId,
                                                DateFormatter.format(timestampStart),
                                                DateFormatter.format(timestampEnd),
@@ -45,7 +41,7 @@ public class Statistics
         return Json.string(matchStats);
     }
 
-    public void collect(EndReason endReason, PlayerStats[] players)
+    public void collect(int matchTime, EndReason endReason, PlayerStats[] players)
     {
         this.timestampEnd = LocalDateTime.now();
 
@@ -53,7 +49,7 @@ public class Statistics
         {
             FileWriter fileWriter = new FileWriter("stats/" + fileName + ".json");
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(content(endReason, players));
+            bufferedWriter.write(content(matchTime, endReason, players));
             bufferedWriter.flush();
         }
         catch (Exception e)

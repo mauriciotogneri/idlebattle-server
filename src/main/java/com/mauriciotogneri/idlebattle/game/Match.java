@@ -279,6 +279,8 @@ public class Match
 
     public void update(double dt)
     {
+        System.out.println(totalTime);
+
         if ((state == MatchState.RUNNING) && (players.length == 2))
         {
             totalTime += dt;
@@ -363,7 +365,7 @@ public class Match
     private void finishMatch(EndReason endReason, PlayerStats[] playerStats)
     {
         state = MatchState.FINISHED;
-        statistics.collect(endReason, playerStats);
+        statistics.collect((int) totalTime, endReason, playerStats);
     }
 
     private void checkWinnerByTerritory()

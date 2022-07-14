@@ -14,25 +14,25 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.web.socket.WebSocketSession;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 public class Match
 {
     private final String id;
-    private final List<Player> players;
     private final Lane[] lanes;
     private final MatchConfiguration configuration;
     private final MatchTimes matchTimes;
+    private Player[] players;
     private MatchState state = MatchState.READY;
     private double readyTime = 0;
     private double totalTime = 0;
 
-    public Match(String id, List<Player> players, @NotNull MatchConfiguration configuration, MatchTimes matchTimes)
+    public Match(String id, @NotNull List<Player> players, @NotNull MatchConfiguration configuration, MatchTimes matchTimes)
     {
         this.id = id;
-        this.players = players;
-
+        this.players = playersList(players);
         this.lanes = new Lane[configuration.lanes];
 
         for (int i = 0; i < configuration.lanes; i++)
@@ -51,7 +51,7 @@ public class Match
 
     public boolean hasPlayers()
     {
-        return !players.isEmpty();
+        return (players.length > 0);
     }
 
     public void start()
@@ -69,6 +69,14 @@ public class Match
         return (player != null);
     }
 
+    private Player @NotNull [] playersList(@NotNull List<Player> list)
+    {
+        Player[] result = new Player[list.size()];
+        list.toArray(result);
+
+        return result;
+    }
+
     @Nullable
     public Player onPlayerDisconnected(WebSocketSession webSocket)
     {
@@ -76,7 +84,9 @@ public class Match
 
         if (disconnectedPlayer != null)
         {
-            players.remove(disconnectedPlayer);
+            List<Player> list = Arrays.asList(players);
+            list.remove(disconnectedPlayer);
+            players = playersList(list);
 
             for (Player player : players)
             {
@@ -212,13 +222,13 @@ public class Match
     }
 
     @NotNull
-    private PlayerStatus @NotNull [] playerStatus(@NotNull List<Player> players, Player self)
+    private PlayerStatus @NotNull [] playerStatus(Player @NotNull [] players, Player self)
     {
-        PlayerStatus[] result = new PlayerStatus[players.size()];
+        PlayerStatus[] result = new PlayerStatus[players.length];
 
-        for (int i = 0; i < players.size(); i++)
+        for (int i = 0; i < players.length; i++)
         {
-            Player player = players.get(i);
+            Player player = players[i];
             result[i] = player.status(player == self);
         }
 
@@ -246,7 +256,7 @@ public class Match
 
     public void update(double dt)
     {
-        if ((state == MatchState.RUNNING) && (players.size() == 2))
+        if ((state == MatchState.RUNNING) && (players.length == 2))
         {
             totalTime += dt;
 
@@ -259,7 +269,7 @@ public class Match
 
             for (Lane lane : lanes)
             {
-                sendUpdate |= lane.update(dt, players.get(0), players.get(1));
+                sendUpdate |= lane.update(dt, players[0], players[1]);
             }
 
             if (sendUpdate)
@@ -339,10 +349,10 @@ public class Match
 
     private void checkWinnerByTerritory()
     {
-        if (players.size() == 2)
+        if (players.length == 2)
         {
-            Player player1 = players.get(0);
-            Player player2 = players.get(1);
+            Player player1 = players[0];
+            Player player2 = players[1];
 
             int player1Percentage = player1Percentage();
             int player2Percentage = 100 - player1Percentage;

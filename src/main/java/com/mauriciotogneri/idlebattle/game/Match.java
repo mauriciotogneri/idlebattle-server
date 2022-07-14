@@ -331,7 +331,10 @@ public class Match
     {
         state = MatchState.FINISHED;
 
-        matchTimes.write((int)totalTime);
+        if (writeTime)
+        {
+            matchTimes.write((int) totalTime);
+        }
     }
 
     private void checkWinnerByTerritory()

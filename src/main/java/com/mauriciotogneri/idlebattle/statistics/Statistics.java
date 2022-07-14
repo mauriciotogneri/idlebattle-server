@@ -21,8 +21,6 @@ public class Statistics
     private final LocalDateTime timestampStart;
     private LocalDateTime timestampEnd;
 
-    //private final Lane[] lanes;
-
     public Statistics(String matchId, MatchConfiguration configuration)
     {
         this.matchId = matchId;

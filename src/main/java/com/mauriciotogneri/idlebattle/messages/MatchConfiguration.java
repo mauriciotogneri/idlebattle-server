@@ -12,44 +12,47 @@ public class MatchConfiguration
     public final int lanes;
     public final int readyTimeout; // in seconds
     public final int matchTimeout; // in seconds
-    public final int moneyRate;
-    public final int unitCost;
-    public final double unitSpeed;
+
     public final int initialMoney;
-    public final int lostLaneMoney;
-    public final int laneRewardMoney;
+    public final int moneyRate;
     public final int mineCostMultiplier;
     public final int attackCostMultiplier;
-    public final double blockMultiplier;
-    public final double unitBaseDamage;
 
-    private MatchConfiguration(int lanes,
-                               int readyTimeout,
-                               int matchTimeout,
-                               int moneyRate,
-                               int unitCost,
-                               double unitSpeed,
-                               int initialMoney,
-                               int lostLaneMoney,
-                               int laneRewardMoney,
-                               int mineCostMultiplier,
-                               int attackCostMultiplier,
-                               double blockMultiplier,
-                               double unitBaseDamage)
+    public final int lostLaneMoney;
+    public final int laneRewardMoney;
+
+    public final int unitCost;
+    public final double unitSpeed;
+    public final double unitBaseDamage;
+    public final double blockMultiplier;
+
+    public MatchConfiguration(int lanes,
+                              int readyTimeout,
+                              int matchTimeout,
+                              int initialMoney,
+                              int moneyRate,
+                              int mineCostMultiplier,
+                              int attackCostMultiplier,
+                              int lostLaneMoney,
+                              int laneRewardMoney,
+                              int unitCost,
+                              double unitSpeed,
+                              double unitBaseDamage,
+                              double blockMultiplier)
     {
         this.lanes = lanes;
         this.readyTimeout = readyTimeout;
         this.matchTimeout = matchTimeout;
-        this.moneyRate = moneyRate;
-        this.unitCost = unitCost;
-        this.unitSpeed = unitSpeed;
         this.initialMoney = initialMoney;
-        this.lostLaneMoney = lostLaneMoney;
-        this.laneRewardMoney = laneRewardMoney;
+        this.moneyRate = moneyRate;
         this.mineCostMultiplier = mineCostMultiplier;
         this.attackCostMultiplier = attackCostMultiplier;
-        this.blockMultiplier = blockMultiplier;
+        this.lostLaneMoney = lostLaneMoney;
+        this.laneRewardMoney = laneRewardMoney;
+        this.unitCost = unitCost;
+        this.unitSpeed = unitSpeed;
         this.unitBaseDamage = unitBaseDamage;
+        this.blockMultiplier = blockMultiplier;
     }
 
     public int winnerLimit()
@@ -67,34 +70,37 @@ public class MatchConfiguration
             properties.load(inputStream);
             inputStream.close();
 
-            int lanes = Integer.parseInt(properties.getProperty("LANES"));
-            int readyTimeout = Integer.parseInt(properties.getProperty("READY_TIMEOUT"));
-            int matchTimeout = Integer.parseInt(properties.getProperty("MATCH_TIMEOUT"));
-            int moneyRate = Integer.parseInt(properties.getProperty("MONEY_RATE"));
-            int unitCost = Integer.parseInt(properties.getProperty("UNIT_COST"));
-            double unitSpeed = Double.parseDouble(properties.getProperty("UNIT_SPEED"));
-            int initialMoney = Integer.parseInt(properties.getProperty("INITIAL_MONEY"));
-            int lostLaneMoney = Integer.parseInt(properties.getProperty("LOST_LANE_MONEY"));
-            int laneRewardMoney = Integer.parseInt(properties.getProperty("LANE_REWARD_MONEY"));
-            int mineCostMultiplier = Integer.parseInt(properties.getProperty("MINE_COST_MULTIPLIER"));
-            int attackCostMultiplier = Integer.parseInt(properties.getProperty("ATTACK_COST_MULTIPLIER"));
-            double blockMultiplier = Double.parseDouble(properties.getProperty("BLOCK_MULTIPLIER"));
-            double unitBaseDamage = Double.parseDouble(properties.getProperty("UNIT_BASE_DAMAGE"));
+            int lanes = Integer.parseInt(properties.getProperty("lanes"));
+            int readyTimeout = Integer.parseInt(properties.getProperty("ready_timeout"));
+            int matchTimeout = Integer.parseInt(properties.getProperty("match_timeout"));
+
+            int initialMoney = Integer.parseInt(properties.getProperty("initial_money"));
+            int moneyRate = Integer.parseInt(properties.getProperty("money_rate"));
+            int mineCostMultiplier = Integer.parseInt(properties.getProperty("mine_cost_multiplier"));
+            int attackCostMultiplier = Integer.parseInt(properties.getProperty("attack_cost_multiplier"));
+
+            int lostLaneMoney = Integer.parseInt(properties.getProperty("lost_lane_money"));
+            int laneRewardMoney = Integer.parseInt(properties.getProperty("lane_reward_money"));
+
+            int unitCost = Integer.parseInt(properties.getProperty("unit_cost"));
+            double unitSpeed = Double.parseDouble(properties.getProperty("unit_speed"));
+            double unitBaseDamage = Double.parseDouble(properties.getProperty("unit_base_damage"));
+            double blockMultiplier = Double.parseDouble(properties.getProperty("block_multiplier"));
 
             return new MatchConfiguration(
                     lanes,
                     readyTimeout,
                     matchTimeout,
-                    moneyRate,
-                    unitCost,
-                    unitSpeed,
                     initialMoney,
-                    lostLaneMoney,
-                    laneRewardMoney,
+                    moneyRate,
                     mineCostMultiplier,
                     attackCostMultiplier,
-                    blockMultiplier,
-                    unitBaseDamage);
+                    lostLaneMoney,
+                    laneRewardMoney,
+                    unitCost,
+                    unitSpeed,
+                    unitBaseDamage,
+                    blockMultiplier);
         }
         catch (Exception e)
         {

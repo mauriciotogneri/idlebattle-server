@@ -1,3 +1,5 @@
 # Idle Battle Server
 
-https://zeronest.com:8888
+## TODO
+* Move server to another folder
+* Collect event stats

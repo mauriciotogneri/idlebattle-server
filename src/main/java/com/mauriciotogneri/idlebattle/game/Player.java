@@ -10,10 +10,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.web.socket.WebSocketSession;
 
+import java.util.UUID;
+
 public class Player
 {
     private final MatchConfiguration configuration;
     private final WebSocketSession webSocket;
+    private final String id;
     private final String name;
     private final int direction;
 
@@ -24,6 +27,7 @@ public class Player
 
     public Player(WebSocketSession webSocket, String name, int direction, @NotNull MatchConfiguration configuration)
     {
+        this.id = UUID.randomUUID().toString();
         this.configuration = configuration;
         this.webSocket = webSocket;
         this.name = name;
@@ -34,6 +38,11 @@ public class Player
     public WebSocketSession webSocket()
     {
         return webSocket;
+    }
+
+    public String id()
+    {
+        return id;
     }
 
     public int direction()
@@ -141,6 +150,7 @@ public class Player
     public PlayerStats stats()
     {
         return new PlayerStats(
+                id,
                 name,
                 direction,
                 points,

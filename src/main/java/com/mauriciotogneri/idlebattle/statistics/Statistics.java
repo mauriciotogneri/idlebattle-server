@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Statistics
 {
@@ -18,6 +20,7 @@ public class Statistics
     private final String fileName;
     private final MatchConfiguration configuration;
     private final LocalDateTime timestampStart;
+    private final List<ActionStats> actions = new ArrayList<>();
     private LocalDateTime timestampEnd;
 
     public Statistics(String matchId, MatchConfiguration configuration)
@@ -28,6 +31,11 @@ public class Statistics
         this.fileName = String.format("%s_%s", DateFormatter.format(timestampStart), matchId);
     }
 
+    public void addAction(ActionStats action)
+    {
+        actions.add(action);
+    }
+
     private @NotNull String content(int matchTime, EndReason endReason, PlayerStats[] players)
     {
         MatchStats matchStats = new MatchStats(matchId,
@@ -36,7 +44,8 @@ public class Statistics
                                                matchTime,
                                                endReason,
                                                configuration,
-                                               players);
+                                               players,
+                                               actions);
 
         return Json.string(matchStats);
     }

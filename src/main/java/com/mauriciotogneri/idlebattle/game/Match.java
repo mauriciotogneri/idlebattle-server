@@ -6,6 +6,7 @@ import com.mauriciotogneri.idlebattle.messages.MatchStatus;
 import com.mauriciotogneri.idlebattle.messages.OutputMessage;
 import com.mauriciotogneri.idlebattle.messages.PlayerStatus;
 import com.mauriciotogneri.idlebattle.server.Server;
+import com.mauriciotogneri.idlebattle.statistics.ActionStats;
 import com.mauriciotogneri.idlebattle.statistics.PlayerStats;
 import com.mauriciotogneri.idlebattle.statistics.Statistics;
 import com.mauriciotogneri.idlebattle.types.EndReason;
@@ -66,8 +67,10 @@ public class Match
     {
         for (Player player : players)
         {
-            player.send(OutputMessage.matchReady(status(player), configuration));
+            player.send(OutputMessage.matchReady(matchStatus(player), configuration));
         }
+
+        statistics.addAction(ActionStats.matchReady(fullMatchStatus()));
     }
 
     public boolean hasConnection(WebSocketSession webSocket)
@@ -94,7 +97,7 @@ public class Match
         {
             PlayerStats[] playerStats = playerStats(players);
 
-            List<Player> list =  new ArrayList<>(Arrays.asList(players));
+            List<Player> list = new ArrayList<>(Arrays.asList(players));
             list.remove(disconnectedPlayer);
             players = playersList(list);
 
@@ -102,6 +105,8 @@ public class Match
             {
                 player.send(OutputMessage.playerDisconnected(disconnectedPlayer.name(), id));
             }
+
+            statistics.addAction(ActionStats.playerDisconnected(disconnectedPlayer));
 
             if (!hasPlayers())
             {
@@ -120,6 +125,7 @@ public class Match
         {
             player.increaseMine(configuration.mineCostMultiplier);
             sendMatchUpdate();
+            statistics.addAction(ActionStats.increaseMine(player));
         }
         else
         {
@@ -135,6 +141,7 @@ public class Match
         {
             player.increaseAttack(configuration.attackCostMultiplier);
             sendMatchUpdate();
+            statistics.addAction(ActionStats.increaseAttack(player));
         }
         else
         {
@@ -160,6 +167,7 @@ public class Match
                     {
                         lane.launchUnits(units);
                         broadcast(OutputMessage.unitsLaunched(laneId, amount, player.direction(), player.attackLevel()));
+                        statistics.addAction(ActionStats.unitsLaunched(player, laneId, amount, player.direction(), player.attackLevel()));
                     }
                     else
                     {
@@ -221,7 +229,7 @@ public class Match
     }
 
     @NotNull
-    private MatchStatus status(Player player)
+    private MatchStatus matchStatus(@Nullable Player player)
     {
         return new MatchStatus(
                 id,
@@ -232,7 +240,18 @@ public class Match
     }
 
     @NotNull
-    private PlayerStatus @NotNull [] playerStatus(Player self)
+    private MatchStatus fullMatchStatus()
+    {
+        return new MatchStatus(
+                id,
+                (int) (configuration.matchTimeout - totalTime),
+                fullPlayerStatus(),
+                laneStatus()
+        );
+    }
+
+    @NotNull
+    private PlayerStatus @NotNull [] playerStatus(@Nullable Player self)
     {
         PlayerStatus[] result = new PlayerStatus[players.length];
 
@@ -240,6 +259,20 @@ public class Match
         {
             Player player = players[i];
             result[i] = player.status(player == self);
+        }
+
+        return result;
+    }
+
+    @NotNull
+    private PlayerStatus @NotNull [] fullPlayerStatus()
+    {
+        PlayerStatus[] result = new PlayerStatus[players.length];
+
+        for (int i = 0; i < players.length; i++)
+        {
+            Player player = players[i];
+            result[i] = player.status(true);
         }
 
         return result;
@@ -317,6 +350,7 @@ public class Match
             {
                 state = MatchState.RUNNING;
                 broadcast(OutputMessage.matchStarted());
+                statistics.addAction(ActionStats.matchStarted());
             }
         }
     }
@@ -325,8 +359,10 @@ public class Match
     {
         for (Player player : players)
         {
-            player.send(OutputMessage.matchUpdate(status(player)));
+            player.send(OutputMessage.matchUpdate(matchStatus(player)));
         }
+
+        statistics.addAction(ActionStats.matchUpdate(fullMatchStatus()));
     }
 
     private boolean checkWinnerByPoints()
@@ -364,6 +400,7 @@ public class Match
     private void finishMatch(EndReason endReason, PlayerStats[] playerStats)
     {
         state = MatchState.FINISHED;
+        statistics.addAction(ActionStats.matchFinished(fullMatchStatus(), endReason));
         statistics.collect((int) totalTime, endReason, playerStats);
     }
 

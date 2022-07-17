@@ -216,6 +216,30 @@ public class OutputMessage
     }
 
     @NotNull
+    public static OutputMessage laneRewardWon()
+    {
+        return create(OutputEvent.LANE_REWARD_WON);
+    }
+
+    @NotNull
+    public static OutputMessage laneRewardLost()
+    {
+        return create(OutputEvent.LANE_REWARD_LOST);
+    }
+
+    @NotNull
+    public static OutputMessage laneWon()
+    {
+        return create(OutputEvent.LANE_WON);
+    }
+
+    @NotNull
+    public static OutputMessage laneLost()
+    {
+        return create(OutputEvent.LANE_LOST);
+    }
+
+    @NotNull
     public static OutputMessage unitsLaunched(int laneId, int amount, int direction, int attackLevel)
     {
         return create(OutputEvent.UNITS_LAUNCHED)

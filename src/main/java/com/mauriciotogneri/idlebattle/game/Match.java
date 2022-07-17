@@ -322,16 +322,23 @@ public class Match
                 player.update(dt);
             }
 
-            boolean sendUpdate = false;
+            List<LaneUpdate> laneUpdates = new ArrayList<>();
 
             for (Lane lane : lanes)
             {
-                sendUpdate |= lane.update(dt, players[0], players[1]);
+                laneUpdates.addAll(lane.update(dt, players[0], players[1]));
             }
 
-            if (sendUpdate)
+            for (LaneUpdate update : laneUpdates)
             {
-                sendMatchUpdate();
+                if (update.isMatchUpdate())
+                {
+                    sendMatchUpdate();
+                }
+                else
+                {
+                    update.send();
+                }
             }
 
             if (!checkWinnerByPoints())

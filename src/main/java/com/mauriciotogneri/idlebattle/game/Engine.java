@@ -222,9 +222,12 @@ public class Engine
             }
         }
 
-        for (Match match : matchesToRemove)
+        if (!matchesToRemove.isEmpty())
         {
-            matches.remove(match);
+            for (Match match : matchesToRemove)
+            {
+                matches.remove(match);
+            }
         }
     }
 }

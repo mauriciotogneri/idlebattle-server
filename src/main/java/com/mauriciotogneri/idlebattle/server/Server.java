@@ -25,6 +25,7 @@ public class Server extends TextWebSocketHandler
         super.afterConnectionEstablished(webSocket);
 
         Logger.onConnected(webSocket);
+        Server.send(webSocket, OutputMessage.welcome());
     }
 
     @Override

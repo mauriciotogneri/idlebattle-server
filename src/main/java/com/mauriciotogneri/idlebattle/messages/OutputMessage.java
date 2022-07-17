@@ -174,6 +174,12 @@ public class OutputMessage
     }
 
     @NotNull
+    public static OutputMessage welcome()
+    {
+        return create(OutputEvent.WELCOME);
+    }
+
+    @NotNull
     public static OutputMessage waitingPublic()
     {
         return create(OutputEvent.WAITING_PUBLIC);

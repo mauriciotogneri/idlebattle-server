@@ -3,6 +3,7 @@ package com.mauriciotogneri.idlebattle.types;
 public enum OutputEvent
 {
     ECHO,
+    WELCOME,
     WAITING_PUBLIC,
     WAITING_PRIVATE,
     MATCH_READY,

@@ -329,16 +329,14 @@ public class Match
                 laneUpdates.addAll(lane.update(dt, players[0], players[1]));
             }
 
+            if (!laneUpdates.isEmpty())
+            {
+                sendMatchUpdate();
+            }
+
             for (LaneUpdate update : laneUpdates)
             {
-                if (update.isMatchUpdate())
-                {
-                    sendMatchUpdate();
-                }
-                else
-                {
-                    update.send();
-                }
+                update.send();
             }
 
             if (!checkWinnerByPoints())

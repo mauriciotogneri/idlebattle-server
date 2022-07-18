@@ -17,11 +17,6 @@ public class LaneUpdate
         this.player = player;
     }
 
-    public boolean isMatchUpdate()
-    {
-        return (event == OutputEvent.MATCH_UPDATE);
-    }
-
     public void send()
     {
         OutputMessage message = message();
@@ -67,10 +62,5 @@ public class LaneUpdate
     public static @NotNull LaneUpdate laneLost(Player player)
     {
         return new LaneUpdate(OutputEvent.LANE_LOST, player);
-    }
-
-    public static @NotNull LaneUpdate matchUpdate()
-    {
-        return new LaneUpdate(OutputEvent.MATCH_UPDATE, null);
     }
 }

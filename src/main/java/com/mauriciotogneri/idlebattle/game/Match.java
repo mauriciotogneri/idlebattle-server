@@ -233,7 +233,7 @@ public class Match
     {
         return new MatchStatus(
                 id,
-                (int) (configuration.matchTimeout - totalTime),
+                configuration.matchTimeout - totalTime,
                 playerStatus(player),
                 laneStatus()
         );
@@ -244,7 +244,7 @@ public class Match
     {
         return new MatchStatus(
                 id,
-                (int) (configuration.matchTimeout - totalTime),
+                configuration.matchTimeout - totalTime,
                 fullPlayerStatus(),
                 laneStatus()
         );

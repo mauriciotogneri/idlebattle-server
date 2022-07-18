@@ -3,12 +3,12 @@ package com.mauriciotogneri.idlebattle.messages;
 public class MatchStatus
 {
     private final String id;
-    private final Integer remainingTime;
+    private final Double remainingTime;
     private final PlayerStatus[] players;
     private final LaneStatus[] lanes;
 
     public MatchStatus(String id,
-                       Integer remainingTime,
+                       Double remainingTime,
                        PlayerStatus[] player,
                        LaneStatus[] lanes)
     {
